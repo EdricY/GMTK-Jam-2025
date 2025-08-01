@@ -2,12 +2,15 @@ import { $ } from "./util";
 
 const container = $("#hangman");
 
-export function setupHangman(length) {
-  const hgword1 = createHangmanWord(length);
-  container.append(hgword1)
+const hangmanSegments = [];
 
-  const hgword2 = createHangmanWord(length);
-  container.append(hgword2)
+export function setupHangman(level) {
+  hangmanSegments.splice(0);
+  for (let i = 0; i < level.words.length; i++) {
+    const word = level.words[i];
+    const hgword = createHangmanWord(word.length);
+    container.append(hgword)
+  }
 }
 
 export function createHangmanWord(length) {
@@ -16,6 +19,7 @@ export function createHangmanWord(length) {
   for (let i = 0; i < length; i++) {
     const segEl = createHangmanSegment()
     wordEl.appendChild(segEl);
+    hangmanSegments.push(segEl);
   }
 
   return wordEl;
@@ -30,14 +34,24 @@ export function createHangmanSegment() {
 }
 
 export function fillHangmanSegment(i, ch) {
-  const r = Math.floor(i / currentLength);
-  const c = i % currentLength;
+  const el = hangmanSegments[i];
+  el.innerText = ch;
+  if (ch) el.classList.add("used")
+  else el.classList.remove("used")
 
-  if (r >= container.children.length) return;
-  if (c >= container.children[r].children.length) return;
-  container.children[r].children[c].innerText = ch;
+  // const r = Math.floor(i / currentLength);
+  // const c = i % currentLength;
+
+  // if (r >= container.children.length) return;
+  // if (c >= container.children[r].children.length) return;
+  // const el = container.children[r].children[c];
 }
 
 export function removeHangmanSegment(i) {
   fillHangmanSegment(i, "")
 }
+
+
+// const method = ch ? "add" : "remove";
+// el.classList[method]("used")
+

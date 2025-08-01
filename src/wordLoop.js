@@ -1,28 +1,49 @@
+import globals from "./globals";
 import { fillHangmanSegment, removeHangmanSegment } from "./hangman";
-import { clearDownTo } from "./main";
+import { levels } from "./levels";
+import { advanceLevel, clearDownTo } from "./main";
 import { $, mod } from "./util";
 
+const ctx = globals.ctx;
+const letterArray = globals.letterArray;
 function crossoverWords(crossPos, word1, word2) {
   let newWord1 = word1.slice(0, crossPos) + word2.slice(crossPos);
   let newWord2 = word2.slice(0, crossPos) + word1.slice(crossPos);
   return [newWord1, newWord2]
 }
 
-export function setupWordLoops() {
-  const crossPos = 4;
-  let word1 = "tomorrow";
-  let word2 = "alphabet";
+function splitByLength(str, length) {
+  const result = [];
+  for (let i = 0; i < str.length; i += length) {
+    result.push(str.slice(i, i + length));
+  }
+  return result;
+}
 
-  [word1, word2] = crossoverWords(crossPos, word1, word2);
+export function setupWordLoops(levelNum) {
+  const { crossPos } = levels[levelNum];
+  const words = levels[levelNum].words;
 
-  const wl = createWordLoop(word1);
-  const wl2 = createWordLoop(word2, { size: "big" });
+  // balance letters
+  const longStr = words.join("");
+  const avgLength = longStr.length / words.length;
+  if (!Number.isInteger(avgLength)) console.log("length problem", avgLength, longStr)
 
-  // const wl = createWordLoop("circle");
-  // const wl2 = createWordLoop("powers", { size: "big", turns: 0 });
+  let balancedWords = splitByLength(longStr, avgLength)
 
-  $("#game-stage").append(wl);
-  $("#game-stage").append(wl2);
+  for (let c of crossPos) {
+    balancedWords = crossoverWords(c, ...balancedWords);
+  }
+
+  // create word loops
+  globals.currentLength = avgLength;
+  const randTurns = Math.floor(Math.random() * globals.currentLength);
+  for (let i = 0; i < balancedWords.length; i++) {
+    const options = { turns: randTurns }
+    if (i == 1) options.size = "big";
+    const wl = createWordLoop(balancedWords[i], options);
+    $("#game-stage").append(wl);
+  }
 }
 
 export function createWordLoop(word, { size, turns = 0 } = {}) {
@@ -71,7 +92,9 @@ export function createLoopLetter(ch, idx) {
   return wrapEl;
 }
 
+let winTransitioning = false;
 function hitLetter(e) {
+  if (winTransitioning) return;
   let letter;
   // find what we're hitting (easy for mouse, hard for touch)
   if (e.pointerType == "mouse") {
@@ -90,13 +113,15 @@ function hitLetter(e) {
     }
   }
 
-  const prevLetter = letterArray[letterArray.length - 1];
+  const prevLetter = globals.letterArray[globals.letterArray.length - 1];
+  const len = globals.currentLength;
   if (letter == prevLetter) return;
   // check if it could be next letter
   const i = letter.getAttribute("data-i");
   const prevI = prevLetter?.getAttribute("data-i");
-  if (prevI == null || mod(prevI - i, currentLength) == mod(-1, currentLength)) {
-
+  // avoid hitting the letter directly above/below
+  if (mod(prevI - i, len) == 0) return;
+  if (prevI == null || mod(prevI - i, len) == mod(-1, len)) {
     // not a new letter, do nothing (avoid accidental clearing)
     if (letter.classList.contains("letter-used")) return;
 
@@ -111,15 +136,46 @@ function hitLetter(e) {
     ctx.beginPath();
     ctx.moveTo(pos.x + pos.width / 2, pos.y + pos.height / 2);
 
-    fillHangmanSegment(letterArray.length, ch)
-    letterArray.push(letter);
+    fillHangmanSegment(globals.letterArray.length, ch)
+    globals.letterArray.push(letter);
+
+    if (globals.letterArray.length == levels[globals.currentLevelNum].words.join("").length) {
+      if (isCorrect()) {
+        console.log("correct!");
+        winTransitioning = true;
+        $("#hangman").classList.add("correct")
+        setTimeout(() => {
+          winTransitioning = false;
+          advanceLevel();
+        }, 1000)
+      }
+      else {
+        console.log("nope!")
+      }
+    }
   }
   else if (letter.classList.contains("letter-used")) {
-    const idx = letterArray.indexOf(letter);
+    const idx = globals.letterArray.indexOf(letter);
     // remove down to that point
     clearDownTo(idx)
     return;
   }
+}
+
+function isCorrect() {
+  const words = levels[globals.currentLevelNum].words;
+  const a = letterArray.map(x => x.innerText).join("").toUpperCase();
+  const b = words.join("").toUpperCase();
+  if (a == b) return true;
+
+  // if two words can be swapped
+  if (words.every(x => x.length == words[0].length)) {
+    const c = words.reverse().join("").toUpperCase();
+    if (a == c) return true;
+  }
+
+  // TODO: logic for 3 words?
+  return false;
 }
 
 window.vm = {

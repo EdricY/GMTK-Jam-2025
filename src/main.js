@@ -1,18 +1,18 @@
 import './style.css'
 import javascriptLogo from './javascript.svg'
 import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.js'
 import { createWordLoop, setupWordLoops } from './wordLoop.js'
-import { $ } from './util.js'
+import { $, $$ } from './util.js'
 import { createHangmanWord, removeHangmanSegment, setupHangman } from './hangman.js'
+import { setupMenus } from './menus.js'
+import { levels } from './levels.js'
+import globals from './globals.js'
 
-window.ctx = $("#canvas").getContext("2d");
-window.cursor = { x: 0, y: 0 };
-window.letterArray = [];
-window.currentLength = 8;
+setupMenus();
+const ctx = globals.ctx;
+const letterArray = globals.letterArray;
 
 const resizeCanvas = (e) => {
-  console.log(e)
   // console.log("rs", window.innerHeight, window.innerWidth)
   const dpr = window.devicePixelRatio || 1;
   ctx.canvas.height = document.body.clientHeight * dpr;
@@ -31,16 +31,28 @@ window.addEventListener("resize", resizeCanvas);
 
 resizeCanvas();
 
-$("#start-btn").addEventListener("click", setupGame);
+export function advanceLevel() {
+  globals.currentLevelNum = Number(globals.currentLevelNum) + 1;
+  cleanUpGame();
+  setupGame(globals.currentLevelNum);
+}
 
+export function cleanUpGame() {
+  $("#hangman").classList.remove("correct");
+  $("#hangman").innerHTML = "";
+  $$(".wordLoop").forEach(el => {
+    el.parentElement.removeChild(el);
+  });
+  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  ctx.beginPath();
+  letterArray.splice(0);
 
-function setupGame() {
-  $("#menu").classList.add("hidden!");
-  $("#game-stage").classList.remove("hidden!");
-  setupWordLoops();
-  setupHangman(currentLength);
+}
 
-  ctx.fillText(window.devicePixelRatio, 10 , 10)
+export function setupGame(levelNum) {
+  globals.currentLevelNum = levelNum;
+  setupWordLoops(levelNum);
+  setupHangman(levels[levelNum]);
 }
 
 window.addEventListener("pointerup", () => {
