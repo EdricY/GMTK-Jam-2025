@@ -1,8 +1,8 @@
 import globals from "./globals";
 import { fillHangmanSegment, removeHangmanSegment } from "./hangman";
 import { levels } from "./levels";
-import { advanceLevel, clearDownTo } from "./main";
-import { $, mod } from "./util";
+import { advanceLevel, clearArray, clearDownTo } from "./main";
+import { $, $$, mod, swap } from "./util";
 
 const ctx = globals.ctx;
 const letterArray = globals.letterArray;
@@ -21,12 +21,13 @@ function splitByLength(str, length) {
 }
 
 export function setupWordLoops(levelNum) {
-  const { crossPos } = levels[levelNum];
-  const words = levels[levelNum].words;
+  const level = levels[levelNum];
+  const { crossPos, words } = level;
 
   // balance letters
   const longStr = words.join("");
-  const avgLength = longStr.length / words.length;
+  const rings = level.numRings ?? Math.min(words.length, 2);
+  const avgLength = longStr.length / rings;
   if (!Number.isInteger(avgLength)) console.log("length problem", avgLength, longStr)
 
   let balancedWords = splitByLength(longStr, avgLength)
@@ -37,10 +38,15 @@ export function setupWordLoops(levelNum) {
 
   // create word loops
   globals.currentLength = avgLength;
+  globals.outsideStart = true;
   const randTurns = Math.floor(Math.random() * globals.currentLength);
-  for (let i = 0; i < balancedWords.length; i++) {
+  if (rings > 1 && Math.random() > 0.5) {
+    globals.outsideStart = false;
+    swap(balancedWords, 0, 1);
+  }
+  for (let i = 0; i < rings; i++) {
     const options = { turns: randTurns }
-    if (i == 1) options.size = "big";
+    if (i == 0) options.size = "big";
     const wl = createWordLoop(balancedWords[i], options);
     $("#game-stage").append(wl);
   }
@@ -62,12 +68,10 @@ export function createWordLoop(word, { size, turns = 0 } = {}) {
 
   const turnDeg = turns * deg;
   el.style.rotate = `${turnDeg}deg`;
-
   if (!size || size == "small") {
     el.classList.add("size-64");
   } else {
-    el.classList.add("size-96");
-    el.style.rotate = `${turnDeg}deg`;
+    el.classList.add("big");
   }
   return el;
 }
@@ -130,27 +134,53 @@ function hitLetter(e) {
     const ch = letter.innerText;
 
     const pos = letter.getBoundingClientRect();
+    if (!prevLetter) {
+      ctx.beginPath();
+      console.log("START")
+      ctx.moveTo(pos.x + pos.width / 2, pos.y + pos.height / 2);
+    }
+    else {
+      ctx.lineTo(pos.x + pos.width / 2, pos.y + pos.height / 2);
+      ctx.strokeStyle = "#1c122c44";
+      ctx.stroke();
+    }
 
-    ctx.lineTo(pos.x + pos.width / 2, pos.y + pos.height / 2);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(pos.x + pos.width / 2, pos.y + pos.height / 2);
 
     fillHangmanSegment(globals.letterArray.length, ch)
     globals.letterArray.push(letter);
 
     if (globals.letterArray.length == levels[globals.currentLevelNum].words.join("").length) {
       if (isCorrect()) {
-        console.log("correct!");
         winTransitioning = true;
+        console.log("correct!");
+        ctx.closePath();
+        ctx.strokeStyle = "#1c122c44";
+        [1, 2, 3, 4, 5, 6].forEach(() => ctx.stroke())
         $("#hangman").classList.add("correct")
+        $("#canvas").classList.add("correct")
+        $("#instruction").classList.add("correct")
+        $("#canvas").animate([
+          { opacity: 1 },
+          { opacity: 0 },
+        ],
+          { duration: 300, delay: 1500, fill: "both" }
+        );
+
+        $$(".wordLoop").forEach(x => x.classList.add("correct"))
         setTimeout(() => {
           winTransitioning = false;
           advanceLevel();
-        }, 1000)
+        }, 2000)
       }
       else {
-        console.log("nope!")
+        $("#hangman").animate([
+          { transform: "translateX(0)" },
+          { transform: "translateX(1%)" },
+          { transform: "translateX(-1%)" },
+          { transform: "translateX(0)" },
+        ],
+          { duration: 200 }
+        )
       }
     }
   }
@@ -178,7 +208,9 @@ function isCorrect() {
   return false;
 }
 
-window.vm = {
-  createWordLoop,
-  createLoopLetter,
-}
+window.addEventListener("pointerup", () => {
+  if (!winTransitioning) clearArray();
+});
+window.addEventListener("mousedown", () => {
+  if (!winTransitioning) clearArray();
+});

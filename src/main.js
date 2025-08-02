@@ -2,43 +2,54 @@ import './style.css'
 import javascriptLogo from './javascript.svg'
 import viteLogo from '/vite.svg'
 import { createWordLoop, setupWordLoops } from './wordLoop.js'
-import { $, $$ } from './util.js'
+import { $, $$, mod, swap } from './util.js'
 import { createHangmanWord, removeHangmanSegment, setupHangman } from './hangman.js'
-import { setupMenus } from './menus.js'
-import { levels } from './levels.js'
+import { setupMenus, showStage } from './menus.js'
+import { getTitle, levels, setComplete } from './levels.js'
 import globals from './globals.js'
 
 setupMenus();
 const ctx = globals.ctx;
 const letterArray = globals.letterArray;
 
-const resizeCanvas = (e) => {
-  // console.log("rs", window.innerHeight, window.innerWidth)
+const handleResize = (e) => {
+  console.log(window.innerHeight);
+  document.documentElement.style.setProperty("--fullHeight", window.innerHeight + "px")
   const dpr = window.devicePixelRatio || 1;
   ctx.canvas.height = document.body.clientHeight * dpr;
   ctx.canvas.width = document.body.clientWidth * dpr;
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   ctx.lineWidth = 14;
-  ctx.strokeStyle = "#1c122caa";
+  ctx.strokeStyle = "#1c122c44";
   ctx.scale(dpr, dpr);
 
   ctx.font = "bold 48px serif";
+  ctx.lineJoin = "round";
   // ctx.fillText(window.devicePixelRatio || 1, 100 , 100)
   // ctx.fillText(window.innerWidth || 1, 100 , 200)
 }
-window.addEventListener("load", resizeCanvas);
-window.addEventListener("resize", resizeCanvas);
-
-resizeCanvas();
+window.addEventListener("load", handleResize);
+window.addEventListener("resize", handleResize);
+handleResize();
 
 export function advanceLevel() {
   globals.currentLevelNum = Number(globals.currentLevelNum) + 1;
   cleanUpGame();
-  setupGame(globals.currentLevelNum);
+  const level = levels[globals.currentLevelNum];
+  if (level?.words) {
+    setupGame(globals.currentLevelNum);
+  } else {
+    setComplete(globals.currentLevelNum - 1);
+    globals.currentLevelNum = 0;
+    cleanUpGame();
+    showStage($("#levels"))
+  }
 }
 
 export function cleanUpGame() {
   $("#hangman").classList.remove("correct");
+  $("#canvas").classList.remove("correct");
+  $("#instruction").classList.remove("correct");
   $("#hangman").innerHTML = "";
   $$(".wordLoop").forEach(el => {
     el.parentElement.removeChild(el);
@@ -51,13 +62,76 @@ export function cleanUpGame() {
 
 export function setupGame(levelNum) {
   globals.currentLevelNum = levelNum;
+  const level = levels[levelNum];
   setupWordLoops(levelNum);
-  setupHangman(levels[levelNum]);
+  setupHangman(level);
+
+  $("#level-title").innerText = getTitle(Number(levelNum))
+
+  drawHints();
+  $("#canvas").animate([
+    { opacity: 0 },
+    { opacity: 1 },
+  ],
+    { duration: 500, delay: 700, fill: "both" }
+  );
+
+  if (level.instruction) {
+    $("#instruction").classList.remove("hidden!")
+    $("#instruction").innerText = level.instruction
+  }
+  else {
+    $("#instruction").classList.add("hidden!")
+  }
 }
 
-window.addEventListener("pointerup", () => {
-  clearArray();
-});
+export function drawHints() {
+  const { hintsA, hintsB, crossPos = [] } = levels[globals.currentLevelNum]
+  if (!hintsA && !hintsB) return;
+
+  let [aLoop, bLoop] = $$(".wordLoop");
+  if (!globals.outsideStart) {
+    let temp = aLoop;
+    aLoop = bLoop;
+    bLoop = temp;
+  }
+
+  const starts = []
+  const ends = []
+  for (const hint of hintsA) {
+    if (mod(hint) == 0) continue; // would connect to starting letter
+    const start = aLoop.querySelector(`.letter[data-i='${mod(hint - 1)}']`);
+    let end;
+    if (crossPos.includes(hint)) end = bLoop.querySelector(`.letter[data-i='${mod(hint)}']`);
+    else end = aLoop.querySelector(`.letter[data-i='${mod(hint)}']`);
+    starts.push(start);
+    ends.push(end);
+  }
+  for (const hint of hintsB) {
+    const start = bLoop.querySelector(`.letter[data-i='${mod(hint - 1)}']`);
+    let end;
+    if (crossPos.includes(hint)) end = aLoop.querySelector(`.letter[data-i='${mod(hint)}']`);
+    else end = bLoop.querySelector(`.letter[data-i='${mod(hint)}']`);
+    starts.push(start);
+    ends.push(end);
+  }
+
+  // draw them
+  ctx.strokeStyle = "#396392"
+  ctx.setLineDash([10, 5]);
+  for (let i in starts) {
+    ctx.beginPath();
+    const pos1 = starts[i]?.getBoundingClientRect();
+    const pos2 = ends[i]?.getBoundingClientRect();
+    if (!pos1 || !pos2) break;
+    ctx.moveTo(pos1.x + pos1.width / 2, pos1.y + pos1.height / 2);
+    ctx.lineTo(pos2.x + pos2.width / 2, pos2.y + pos2.height / 2);
+    ctx.stroke();
+  }
+  ctx.setLineDash([])
+}
+
+window.drawHints = drawHints;
 
 export function clearArray() {
   clearDownTo(-1);
@@ -70,16 +144,19 @@ export function clearDownTo(idx) {
     letterArray.pop();
   }
 
-  // redraw lines
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  drawHints();
+  // redraw lines
+  ctx.strokeStyle = "#1c122c44";
   ctx.beginPath();
   for (let i = 0; i < letterArray.length; i++) {
     const l = letterArray[i];
     const pos = l.getBoundingClientRect();
+    if (i == 0) {
+      ctx.moveTo(pos.x + pos.width / 2, pos.y + pos.height / 2);
+    }
     ctx.lineTo(pos.x + pos.width / 2, pos.y + pos.height / 2);
     ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(pos.x + pos.width / 2, pos.y + pos.height / 2);
   }
 }
 

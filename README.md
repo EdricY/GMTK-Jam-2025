@@ -2,9 +2,20 @@
 Loop!
 
 TODO:
-win and advance
-quick play / time trial mode
-more animations
-daily?
+hint X and =
+instructional things / tutorial
+complete level animation / start level animation
+quick play / time trial mode / infinite
+daily mode
 save level progress
-word phrase doesn't need to be split in half
+lock / unlock levels 
+title art
+settings
+create and send custom
+spin?
+
+levels as groups
+
+animation timing - do you read the words? do you get to see the cool loop-de-loop
+
+hangman bubble sizing

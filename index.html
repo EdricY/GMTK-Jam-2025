@@ -12,34 +12,56 @@
 
 <body class="">
   <canvas id="canvas">You can't see me</canvas>
-  <div id="game-stage" class="hidden!">
+  <div id="game-stage" class="stage hidden!">
+    <button id="ingame-back-btn">Back</button>
+    <div id="level-title"></div>
     <div id="hangman"></div>
+    <div id="instruction"></div>
   </div>
-  <div id="menu">
+  <div id="menu" class="stage">
     <div class="menu-header">Word Looper</div>
     <div class="menu-options">
       <button id="play-btn" class="menu-btn border-green-dark text-green-dark">Play!</button>
-      <button class="menu-btn border-black">Settings</button>
-      <button class="menu-btn border-black">Credits</button>
+      <button id="daily-btn" class="menu-btn border-black">Today's Loop</button>
+      <button id="credits-btn" class="menu-btn border-black">Credits</button>
     </div>
   </div>
-  <div id="levels" class="hidden!">
-    <button class="level-btn" data-level="1">1</button>
-    <button class="level-btn" data-level="2">2</button>
-    <button class="level-btn" data-level="3">3</button>
-    <button class="level-btn" data-level="4">4</button>
-    <button class="level-btn" data-level="5">5</button>
-    <button class="level-btn" data-level="6">6</button>
-    <button class="level-btn" data-level="7">7</button>
-    <button class="level-btn" data-level="8">8</button>
-    <button class="level-btn" data-level="9">9</button>
-    <button class="level-btn" data-level="10">10</button>
-    <button class="level-btn" data-level="11">11</button>
-    <button class="level-btn" data-level="12">12</button>
-    <button class="level-btn" data-level="13">13</button>
-    <button class="level-btn" data-level="14">14</button>
-    <button class="level-btn" data-level="15">15</button>
+  <div id="levels" class="stage hidden!">
+    <button class="back-to-menu-btn col-span-full mr-auto small-back-btn">Back</button>
+    <button class="level-btn">1</button>
+    <button class="level-btn">2</button>
+    <button class="level-btn">3</button>
+    <button class="level-btn">4</button>
+    <button class="level-btn">5</button>
+    <button class="level-btn">6</button>
+    <button class="level-btn">7</button>
+    <button class="level-btn">8</button>
+    <button class="level-btn">9</button>
+    <button class="level-btn">10</button>
+    <button class="level-btn">11</button>
+    <button class="level-btn">12</button>
+    <button class="level-btn">13</button>
+    <button class="level-btn">14</button>
+    <button class="level-btn">15</button>
+    <button class="level-btn">16</button>
+    <div class="col-span-full mr-auto w-full flex mt-8">
+      <button class="mr-auto menu-btn">Today's Loop</button>
+      <button class="ml-auto menu-btn">Quick Play</button>
+    </div>
+
   </div>
+  <div id="credits" class="stage hidden!">
+    <div class="text-3xl">
+      Word Looper Credits
+    </div>
+    <div class="text-xl text-center">
+      A game by<br />
+      Edric Yu and Imani Muya
+    </div>
+    <button class="back-to-menu-btn col-span-full menu-btn">Back</button>
+  </div>
+
   <script type="module" src="/src/main.js"></script>
 </body>
+
 </html>

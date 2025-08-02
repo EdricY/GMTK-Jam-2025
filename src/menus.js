@@ -1,10 +1,12 @@
-import { setupGame } from "./main";
-import { $ } from "./util";
+import { allLevelStarts } from "./levels";
+import { cleanUpGame, setupGame } from "./main";
+import { $, $$ } from "./util";
 
 const stages = [
   $("#menu"),
   $("#levels"),
   $("#game-stage"),
+  $("#credits"),
 ]
 
 export function hideAllStages() {
@@ -21,17 +23,19 @@ export function showStage(stage) {
 }
 
 export function setupMenus() {
-  setupPlayBtn();
+  setupMenuBtns();
   setupLevelBtns();
 }
 
-function setupPlayBtn() {
-  $("#play-btn").addEventListener("click", e => {
-    showStage($("#levels"))
-  });
-}
-
 function setupLevelBtns() {
+  let unlockedLevels = localStorage.getItem("unlocked");
+  $$(".level-btn").forEach((x, i) => {
+    x.setAttribute("data-level", allLevelStarts[i]);
+    // TODO: look at local storage and disable accordingly
+    if ( i == 0) return;
+    // x.setAttribute("disabled", true);
+  })
+
   $("#levels").addEventListener("click", e => {
     if (e.target.classList.contains("level-btn")) {
       showStage($("#game-stage"));
@@ -39,5 +43,29 @@ function setupLevelBtns() {
       setupGame(level);
     }
   });
+}
+
+
+function setupMenuBtns() {
+  $("#play-btn").addEventListener("click", e => {
+    showStage($("#levels"));
+  });
+
+  $("#credits-btn").addEventListener("click", e => {
+    showStage($("#credits"));
+  });
+
+  $$(".back-to-menu-btn").forEach(x => x.addEventListener("click", e => {
+    cleanUpGame();
+    showStage($("#menu"));
+  }));
+
+  $("#ingame-back-btn").addEventListener("click", e => {
+    cleanUpGame();
+    showStage($("#levels"));
+    // TODO: maybe need to check current level
+  });
+
+
 }
 
