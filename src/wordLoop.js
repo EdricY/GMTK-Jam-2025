@@ -154,17 +154,24 @@ function hitLetter(e) {
         winTransitioning = true;
         console.log("correct!");
         ctx.closePath();
-        ctx.strokeStyle = "#1c122c44";
-        [1, 2, 3, 4, 5, 6].forEach(() => ctx.stroke())
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.strokeStyle = "#1c122c";
+        ctx.stroke();
         $("#hangman").classList.add("correct")
         $("#canvas").classList.add("correct")
         $("#instruction").classList.add("correct")
         $("#canvas").animate([
+          {
+            opacity: 1, filter: "saturate(100%) hue-rotate(0deg)"
+          },
           { opacity: 1 },
-          { opacity: 0 },
+          { opacity: 1 },
+          { opacity: 1, filter: `saturate(500%) hue-rotate(${180 + Math.floor(Math.random() * 360)}deg)` },
+          { opacity: 0, filter: "saturate(100%) hue-rotate(0deg)" },
         ],
-          { duration: 300, delay: 1500, fill: "both" }
+          { duration: 1800, fill: "both" }
         );
+        console.log(180 + Math.random() * 360)
 
         $$(".wordLoop").forEach(x => x.classList.add("correct"))
         setTimeout(() => {
@@ -209,8 +216,10 @@ function isCorrect() {
 }
 
 window.addEventListener("pointerup", () => {
+  if (globals.currentLevelNum == 0) return;
   if (!winTransitioning) clearArray();
 });
 window.addEventListener("mousedown", () => {
+  if (globals.currentLevelNum == 0) return;
   if (!winTransitioning) clearArray();
 });

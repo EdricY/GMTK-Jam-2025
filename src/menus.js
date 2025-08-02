@@ -28,12 +28,16 @@ export function setupMenus() {
 }
 
 function setupLevelBtns() {
-  let unlockedLevels = localStorage.getItem("unlocked");
+  let completedLevels = JSON.parse(localStorage.getItem("wl-progress")) ?? [];
   $$(".level-btn").forEach((x, i) => {
     x.setAttribute("data-level", allLevelStarts[i]);
-    // TODO: look at local storage and disable accordingly
-    if ( i == 0) return;
-    // x.setAttribute("disabled", true);
+    if (completedLevels.includes(i)) {
+      x.classList.add("complete");
+    }
+
+    // if (i != 0) {
+    //   x.setAttribute("disabled", true);
+    // }
   })
 
   $("#levels").addEventListener("click", e => {

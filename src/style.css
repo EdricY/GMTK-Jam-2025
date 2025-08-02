@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Libertinus+Sans:ital,wght@0,400;0,700;1,400&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -8,14 +9,15 @@
 
   --breakpoint-sm: 520px;
   --breakpoint-md: 650px;
+  --font-sans: "Libertinus Sans", sans-serif
 }
 
 :root {
   --test: #396392;
   --minWidth: 480px;
-  
+
   --fullHeight: 100vh;
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Libertinus Sans", sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -32,6 +34,7 @@
   @apply bg-green text-black;
 
   touch-action: none;
+  user-select: none;
 }
 
 @keyframes bg-move-40 {
@@ -41,20 +44,6 @@
 
   100% {
     background-position: -40px 40px;
-  }
-}
-
-@keyframes wobble {
-  0% {
-    transform: rotate(0);
-  }
-
-  50% {
-    transform: rotate(3deg);
-  }
-
-  100% {
-    transform: rotate(0);
   }
 }
 
@@ -147,6 +136,7 @@ body {
 .level-btn.complete {
   @apply text-green-dark border-4 border-green-dark;
 }
+
 .level-btn:disabled {
   @apply bg-accent/60 text-gray-400;
   @apply hover:scale-100 transition;
@@ -176,9 +166,16 @@ body {
   height: var(--fullHeight, 100vh);
   min-width: var(--minWidth);
   touch-action: none;
+  /* filter: hue-rotate(0deg) brightness(1) invert(0); */
+  filter: saturate(100%) hue-rotate(0deg);
+
 }
 
 #canvas.correct {
+  filter: saturate(500%) hue-rotate(60deg);
+
+  /* filter: hue-rotate(60deg) brightness(0) invert(0.5); */
+  transition: filter 1s;
   /* animation: fade-out 500ms 600ms both; */
   /* transition: opacity 500ms 600ms; */
   /* opacity: 0; */
@@ -221,7 +218,6 @@ body {
 }
 
 .wordLoop {
-  /* animation: wobble 5s infinite ease; */
   @apply mt-[37%] sm:mt-[38%] md:mt-[35%];
   @apply absolute uppercase pointer-events-none;
   @apply size-56 sm:size-60 md:size-82;
@@ -236,7 +232,7 @@ body {
 .wordLoop.correct {
   transform: rotate(180deg);
   transition: transform 1500ms;
-  animation: fade-out 900ms 900ms both;
+  animation: fade-out 800ms 400ms both;
 }
 
 .wordLoop.correct .letter {
@@ -286,14 +282,14 @@ body {
 }
 
 #hangman.correct .hangman-seg {
-  scale: 1.02;
+  scale: 1.03;
   transition: scale 300ms 800ms cubic-bezier(.5, .5, 1, 10);
   transform: none;
 }
 
 .hangman-word {
   display: flex;
-  gap: 2%;
+  gap: 0.5%;
   @apply justify-center;
 }
 

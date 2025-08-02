@@ -2,15 +2,16 @@ import { $$ } from "./util";
 
 export const levels = [
   "1. Beginnings",
-  { words: ['fountain'], crossPos: [], hintsA: [0, 3, 5], instruction: "Find the word in the circle! Trace around from the starting letter." },
-  { words: ['pillow'], crossPos: [], instruction: "Always trace clockwise."},
-  { words: ['circles'], crossPos: []},
+  { words: ['fountain'], crossPos: [], instruction: "Find the word in the circle! Trace around from the starting letter." },
+  { words: ['pillow'], crossPos: [], instruction: "Always trace clockwise." },
+  { words: ['circles'], crossPos: [] },
   { words: ['high', 'jump'], numRings: 1, crossPos: [], instruction: "The solution may be more than one word." },
   { words: ['good', 'news'], numRings: 1, crossPos: [], },
   "2. Pithy",
-  { words: ['peanut', 'butter'], crossPos: [2, 3], hintsA: [0, 3, 5], hintsB: [3] },
+  { words: ['peanut', 'butter'], crossPos: [], hintsA: [1], hintsB: [0], instruction: "Blue lines hint where you'll need to trace." },
+  { words: ['pickled', 'peppers'], crossPos: [3, 4], hintsA: [4], hintsB: [3] },
   { words: ['dream', 'big'], numRings: 1, crossPos: [], },
-  { words: ['island', 'nation'], crossPos: [2, 4], instruction: "Blue lines show where you'll need to trace." },
+  { words: ['island', 'nation'], crossPos: [2, 4] },
   { words: ['modern', 'design'], crossPos: [4] },
   { words: ['mystery', 'pyramid'], crossPos: [4] },
   "3. Something",
@@ -26,12 +27,13 @@ export const levels = [
   { words: ['central', 'markets'], crossPos: [4] },
   { words: ['shift', 'happens'], crossPos: [4] },
   "5. Something",
-  { words: ['unauthorized', 'access'], crossPos: [4] },
+  { words: ['zero', 'day', 'exploit'], crossPos: [4], hintsB: [0] },
+  { words: ['authorized', 'access'], crossPos: [4] },
   { words: ['scientific', 'method'], crossPos: [4] },
   { words: ['unexamined', 'life'], crossPos: [4] },
   { words: ['careless', 'whispers'], crossPos: [4] },
   "6. Something",
-  
+
   // { words: ['word    ', '  looper'], crossPos: [], hints: [0, 3, 5] },
   { words: ['thanks', 'for', "playing"], crossPos: [4], instruction: "Nice lol." },
 ]
@@ -61,11 +63,13 @@ export function setComplete(levelNum) {
     if (allLevelStarts[i] <= levelNum) break;
     i--;
   }
-  $$(".level-btn")[i].classList.add("complete");
-  $$(".level-btn")[i+1].removeAttribute("disabled");
+  const levelBtns = $$(".level-btn");
+  levelBtns[i].classList.add("complete");
+  levelBtns[i + 1].removeAttribute("disabled");
 
-
-  // TODO: update local storage on unlocks
+  const p = JSON.parse(localStorage.getItem("wl-progress")) ?? []
+  if (!p.includes(i)) p.push(i);
+  localStorage.setItem("wl-progress", JSON.stringify(p));
 }
 
 
@@ -192,6 +196,6 @@ export function setComplete(levelNum) {
 // say something
 // single ladies
 // misery business
-// 
+
 
 

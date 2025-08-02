@@ -86,7 +86,8 @@ export function setupGame(levelNum) {
 }
 
 export function drawHints() {
-  const { hintsA, hintsB, crossPos = [] } = levels[globals.currentLevelNum]
+  if (globals.currentLevelNum == 0) return;
+  const { hintsA = [], hintsB = [], crossPos = [] } = levels[globals.currentLevelNum]
   if (!hintsA && !hintsB) return;
 
   let [aLoop, bLoop] = $$(".wordLoop");
@@ -100,18 +101,31 @@ export function drawHints() {
   const ends = []
   for (const hint of hintsA) {
     if (mod(hint) == 0) continue; // would connect to starting letter
-    const start = aLoop.querySelector(`.letter[data-i='${mod(hint - 1)}']`);
-    let end;
-    if (crossPos.includes(hint)) end = bLoop.querySelector(`.letter[data-i='${mod(hint)}']`);
-    else end = aLoop.querySelector(`.letter[data-i='${mod(hint)}']`);
+    const end = aLoop.querySelector(`.letter[data-i='${mod(hint)}']`);
+    let start;
+    if (crossPos.includes(hint)) start = bLoop.querySelector(`.letter[data-i='${mod(hint - 1)}']`);
+    else start = aLoop.querySelector(`.letter[data-i='${mod(hint - 1)}']`);
     starts.push(start);
     ends.push(end);
   }
   for (const hint of hintsB) {
-    const start = bLoop.querySelector(`.letter[data-i='${mod(hint - 1)}']`);
-    let end;
-    if (crossPos.includes(hint)) end = aLoop.querySelector(`.letter[data-i='${mod(hint)}']`);
-    else end = bLoop.querySelector(`.letter[data-i='${mod(hint)}']`);
+    if (mod(hint) == 0) continue; // would connect to starting letter
+    const end = bLoop.querySelector(`.letter[data-i='${mod(hint)}']`);
+    let start;
+    if (crossPos.includes(hint)) start = aLoop.querySelector(`.letter[data-i='${mod(hint - 1)}']`);
+    else start = bLoop.querySelector(`.letter[data-i='${mod(hint - 1)}']`)
+    starts.push(start);
+    ends.push(end);
+  }
+
+  if (hintsA.includes(0) || hintsB.includes(0)) {
+    // consider zero to always mean start of second word (start of b loop)
+    const end = bLoop.querySelector(`.letter[data-i='${mod(0)}']`);
+    let start;
+    // if even crossings, this is an inherent cross
+    if (crossPos.length % 2 == 0) start = aLoop.querySelector(`.letter[data-i='${mod(- 1)}']`);
+    // if odd crossings, don't cross
+    else start = bLoop.querySelector(`.letter[data-i='${mod(- 1)}']`)
     starts.push(start);
     ends.push(end);
   }
