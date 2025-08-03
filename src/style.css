@@ -108,13 +108,13 @@ body {
 .title-loop {
   @apply absolute size-100 md:size-120 overflow-hidden;
   rotate: 25deg;
-  transform: rotate(-107deg);
+  /* transform: rotate(-107deg); */
   animation: title-wobble1 8s infinite;
 }
 
 .title-inner-loop {
   @apply size-64 md:size-80;
-  transform: rotate(-120deg);
+  /* transform: rotate(-120deg); */
   animation: title-wobble2 3.4s infinite;
 }
 
