@@ -1,6 +1,8 @@
+import globals from "./globals";
 import { allLevelStarts } from "./levels";
-import { cleanUpGame, setupGame } from "./main";
+import { cleanUpGame, setupDailyGame, setupGame, setupQuickMode, setupSingleMode } from "./main";
 import { $, $$ } from "./util";
+import { createLoopLetter } from "./wordLoop";
 
 const stages = [
   $("#menu"),
@@ -24,6 +26,7 @@ export function showStage(stage) {
 
 export function setupMenus() {
   setupMenuBtns();
+  setupMenuTitle();
   setupLevelBtns();
 }
 
@@ -43,10 +46,27 @@ function setupLevelBtns() {
   $("#levels").addEventListener("click", e => {
     if (e.target.classList.contains("level-btn")) {
       showStage($("#game-stage"));
-      const level = e.target.getAttribute("data-level");
-      setupGame(level);
+      const levelNum = e.target.getAttribute("data-level");
+      setupGame(levelNum);
     }
   });
+
+  $$(".daily-game-btn").forEach(x => x.addEventListener("click", e => {
+    showStage($("#game-stage"));
+    setupDailyGame();
+  }));
+
+
+  $("#single-mode-btn").addEventListener("click", e => {
+    showStage($("#game-stage"));
+    setupSingleMode();
+  });
+  $("#quick-play-btn").addEventListener("click", e => {
+    showStage($("#game-stage"));
+    setupQuickMode();
+  });
+
+
 }
 
 
@@ -65,11 +85,53 @@ function setupMenuBtns() {
   }));
 
   $("#ingame-back-btn").addEventListener("click", e => {
+    if (globals.winTransitioning) return;
     cleanUpGame();
     showStage($("#levels"));
     // TODO: maybe need to check current level
   });
-
-
 }
 
+function setupMenuTitle() {
+  const outer1 = document.createElement("div");
+  outer1.classList.add("title-loop")
+
+  let cursor = outer1;
+  "word".split("").forEach(ch => {
+    const l = createTitleLetter(ch, -1);
+    cursor.append(l)
+    cursor = l;
+  });
+  $("#menu-header").append(outer1);
+
+
+  const outer2 = document.createElement("div");
+  outer2.classList.add("title-loop")
+  outer2.classList.add("title-inner-loop")
+  cursor = outer2
+  "looper".split("").forEach(ch => {
+    const l = createTitleLetter(ch, -1);
+    cursor.append(l)
+    cursor = l;
+  });
+
+  $("#menu-header").append(outer2);
+}
+
+
+export function createTitleLetter(ch, idx) {
+  const wrapEl = document.createElement("div");
+  wrapEl.classList.add("letter-wrap");
+
+  const hitbox = document.createElement("div");
+  hitbox.classList.add("letter");
+  hitbox.setAttribute("data-i", idx)
+
+  const el = document.createElement("div");
+  el.classList.add("letter-circle");
+  el.innerText = ch;
+
+  wrapEl.appendChild(hitbox);
+  hitbox.appendChild(el);
+  return wrapEl;
+}

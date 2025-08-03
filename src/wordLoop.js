@@ -7,6 +7,10 @@ import { $, $$, mod, swap } from "./util";
 const ctx = globals.ctx;
 const letterArray = globals.letterArray;
 function crossoverWords(crossPos, word1, word2) {
+  if (crossPos >= word1.length || crossPos <= 0) {
+    console.log("cross outside range:", crossPos)
+    return;
+  }
   let newWord1 = word1.slice(0, crossPos) + word2.slice(crossPos);
   let newWord2 = word2.slice(0, crossPos) + word1.slice(crossPos);
   return [newWord1, newWord2]
@@ -20,9 +24,8 @@ function splitByLength(str, length) {
   return result;
 }
 
-export function setupWordLoops(levelNum) {
-  const level = levels[levelNum];
-  const { crossPos, words } = level;
+export function setupWordLoops(level) {
+  const { crossPos = [], words } = level;
 
   // balance letters
   const longStr = words.join("");
@@ -96,9 +99,8 @@ export function createLoopLetter(ch, idx) {
   return wrapEl;
 }
 
-let winTransitioning = false;
 function hitLetter(e) {
-  if (winTransitioning) return;
+  if (globals.winTransitioning) return;
   let letter;
   // find what we're hitting (easy for mouse, hard for touch)
   if (e.pointerType == "mouse") {
@@ -136,7 +138,6 @@ function hitLetter(e) {
     const pos = letter.getBoundingClientRect();
     if (!prevLetter) {
       ctx.beginPath();
-      console.log("START")
       ctx.moveTo(pos.x + pos.width / 2, pos.y + pos.height / 2);
     }
     else {
@@ -149,10 +150,9 @@ function hitLetter(e) {
     fillHangmanSegment(globals.letterArray.length, ch)
     globals.letterArray.push(letter);
 
-    if (globals.letterArray.length == levels[globals.currentLevelNum].words.join("").length) {
+    if (globals.letterArray.length == globals.currentLevel.words.join("").length) {
       if (isCorrect()) {
-        winTransitioning = true;
-        console.log("correct!");
+        globals.winTransitioning = true;
         ctx.closePath();
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.strokeStyle = "#1c122c";
@@ -171,11 +171,10 @@ function hitLetter(e) {
         ],
           { duration: 1800, fill: "both" }
         );
-        console.log(180 + Math.random() * 360)
 
         $$(".wordLoop").forEach(x => x.classList.add("correct"))
         setTimeout(() => {
-          winTransitioning = false;
+          globals.winTransitioning = false;
           advanceLevel();
         }, 2000)
       }
@@ -200,7 +199,7 @@ function hitLetter(e) {
 }
 
 function isCorrect() {
-  const words = levels[globals.currentLevelNum].words;
+  const words = globals.currentLevel.words;
   const a = letterArray.map(x => x.innerText).join("").toUpperCase();
   const b = words.join("").toUpperCase();
   if (a == b) return true;
@@ -217,9 +216,9 @@ function isCorrect() {
 
 window.addEventListener("pointerup", () => {
   if (globals.currentLevelNum == 0) return;
-  if (!winTransitioning) clearArray();
+  if (!globals.winTransitioning) clearArray();
 });
 window.addEventListener("mousedown", () => {
   if (globals.currentLevelNum == 0) return;
-  if (!winTransitioning) clearArray();
+  if (!globals.winTransitioning) clearArray();
 });

@@ -92,16 +92,86 @@ body {
 
 #menu {
   margin-inline: auto;
-  background-color: #d3ddcbaa;
+  background-color: #bec7b78a;
   padding: 1rem;
   border-radius: 5px;
   text-align: center;
   @apply flex flex-col justify-center;
 }
 
-.menu-header {
-  @apply text-5xl font-bold;
+#menu-header {
+  @apply size-120 mx-auto relative grid place-items-center pointer-events-none;
 }
+
+.title-loop {
+  @apply absolute size-120 overflow-hidden;
+  rotate: 25deg;
+  animation: title-wobble1 8s infinite;
+}
+
+.title-inner-loop {
+  @apply size-80;
+  animation: title-wobble2 3.4s infinite;
+}
+
+.title-loop .letter-wrap {
+  @apply absolute inset-0;
+  rotate: inherit;
+  animation: title-wobble3 4s infinite;
+}
+
+.title-loop .letter {
+  @apply hover:scale-110
+}
+
+@keyframes title-wobble1 {
+
+  /* center -87deg */
+  0% {
+    transform: rotate(-107deg)
+  }
+
+  50% {
+    transform: rotate(-67deg)
+  }
+
+  100% {
+    transform: rotate(-107deg)
+  }
+}
+
+@keyframes title-wobble2 {
+
+  /* center -110deg */
+  0% {
+    transform: rotate(-120deg)
+  }
+
+  50% {
+    transform: rotate(-100deg)
+  }
+
+  100% {
+    transform: rotate(-120deg)
+  }
+}
+
+@keyframes title-wobble3 {
+
+  /* center -110deg */
+  0% {
+    transform: rotate(5deg)
+  }
+
+  50% {
+    transform: rotate(0deg)
+  }
+
+  100% {
+    transform: rotate(5deg)
+  }
+}
+
 
 .menu-options {
   display: flex;
@@ -112,18 +182,24 @@ body {
 }
 
 .menu-btn {
-  @apply px-4 py-3 rounded-xl w-44 border-4 font-semibold;
+  @apply px-4 py-3 rounded-xl w-44 font-semibold;
   @apply text-xl hover:scale-105 transition;
   @apply bg-accent;
   cursor: pointer;
 }
 
+
 #levels {
   background-color: #aee0bfaa;
-
   @apply p-4;
   @apply grid grid-cols-4 gap-4 relative;
-  @apply items-start content-start;
+  @apply items-start content-start items-stretch;
+}
+
+#levels .menu-btn {
+  @apply mt-auto;
+  @apply w-34 sm:w-34 md:w-44;
+  @apply text-base md:text-xl;
 }
 
 .level-btn {
@@ -183,8 +259,23 @@ body {
 
 #ingame-back-btn {
   @apply top-0 left-0 absolute rounded-xl cursor-pointer;
-  @apply px-4 py-2 m-2;
+  @apply px-4 py-2 m-2 w-17;
   @apply transition bg-accent/40 hover:bg-accent;
+}
+
+#hint-btn {
+  @apply top-0 right-0 absolute rounded-xl cursor-pointer;
+  @apply px-4 py-2 m-2 w-17;
+  @apply transition bg-accent/40 hover:bg-accent;
+  @apply bg-linear-to-r to-accent/40 to-50%;
+  @apply from-49% from-green-dark/40;
+  background-size: 200%;
+  background-position: 100%;
+}
+
+#hint-btn:disabled {
+  @apply cursor-auto;
+  @apply bg-accent/40 hover:bg-accent/40;
 }
 
 #level-title {

@@ -14,3 +14,13 @@ export function swap(arr, i, j) {
   arr[i] = temp;
 }
 
+export const randEl = (array, rand = Math.random) => {
+  const i = randInt(0, array.length - 1, rand)
+  return array[i];
+}
+
+export const randInt = (min, max, rand = Math.random) => {
+  const range = max - min + 1;
+  return Math.floor(min + rand() * range);
+}
+

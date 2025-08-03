@@ -1,19 +1,19 @@
 import './style.css'
-import javascriptLogo from './javascript.svg'
-import viteLogo from '/vite.svg'
 import { createWordLoop, setupWordLoops } from './wordLoop.js'
-import { $, $$, mod, swap } from './util.js'
+import { $, $$, mod, randEl, randInt, swap } from './util.js'
 import { createHangmanWord, removeHangmanSegment, setupHangman } from './hangman.js'
 import { setupMenus, showStage } from './menus.js'
-import { getTitle, levels, setComplete } from './levels.js'
+import { getRandomQuickLevels, getRandomSingles, getTitle, levels, setComplete } from './levels.js'
 import globals from './globals.js'
+import { words6 } from './dictionary-6.js'
+import { getDailyLevel } from './daily.js'
 
 setupMenus();
 const ctx = globals.ctx;
 const letterArray = globals.letterArray;
 
 const handleResize = (e) => {
-  console.log(window.innerHeight);
+  // console.log(window.innerHeight);
   document.documentElement.style.setProperty("--fullHeight", window.innerHeight + "px")
   const dpr = window.devicePixelRatio || 1;
   ctx.canvas.height = document.body.clientHeight * dpr;
@@ -34,13 +34,37 @@ handleResize();
 
 export function advanceLevel() {
   globals.currentLevelNum = Number(globals.currentLevelNum) + 1;
+  let level;
+  if (globals.currentLevelNum >= SINGLE_START && globals.currentLevelNum < SINGLE_END) {
+    level = globals.singleLevels[globals.currentLevelNum - SINGLE_START];
+    $("#level-title").innerText = `${globals.currentLevelNum - SINGLE_START + 1} / 10`
+    cleanUpGame();
+    setupGameLevel(level);
+    globals.currentLevel = level
+    return;
+
+  }
+  else if (globals.currentLevelNum >= QUICK_START && globals.currentLevelNum < QUICK_END) {
+    level = globals.quickLevels[globals.currentLevelNum - QUICK_START];
+    $("#level-title").innerText = `${globals.currentLevelNum - QUICK_START + 1} / 5`
+    cleanUpGame();
+    setupGameLevel(level);
+    globals.currentLevel = level
+    return;
+  }
+  else {
+    level = levels[globals.currentLevelNum];
+  }
+
   cleanUpGame();
-  const level = levels[globals.currentLevelNum];
   if (level?.words) {
+    globals.currentLevel = level
     setupGame(globals.currentLevelNum);
   } else {
+    // no next level, return to levels
     setComplete(globals.currentLevelNum - 1);
     globals.currentLevelNum = 0;
+    globals.currentLevel = null;
     cleanUpGame();
     showStage($("#levels"))
   }
@@ -57,16 +81,52 @@ export function cleanUpGame() {
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   ctx.beginPath();
   letterArray.splice(0);
-
 }
 
 export function setupGame(levelNum) {
   globals.currentLevelNum = levelNum;
   const level = levels[levelNum];
-  setupWordLoops(levelNum);
-  setupHangman(level);
-
   $("#level-title").innerText = getTitle(Number(levelNum))
+  setupGameLevel(level)
+}
+
+export function setupDailyGame() {
+  globals.currentLevelNum = -1;
+  const level = getDailyLevel();
+  $("#level-title").innerText = new Date().toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+
+  })
+  setupGameLevel(level)
+}
+
+const SINGLE_START = -30;
+const SINGLE_END = -20;
+export function setupSingleMode() {
+  globals.currentLevelNum = SINGLE_START;
+  globals.singleLevels = getRandomSingles();
+  const level = globals.singleLevels[0];
+  $("#level-title").innerText = "1 / 10"
+  setupGameLevel(level)
+}
+
+const QUICK_START = -50;
+const QUICK_END = -45;
+export function setupQuickMode() {
+  globals.currentLevelNum = QUICK_START;
+  globals.quickLevels = getRandomQuickLevels();
+  const level = globals.quickLevels[0];
+  $("#level-title").innerText = "1 / 5"
+  setupGameLevel(level)
+}
+
+
+export function setupGameLevel(level) {
+  globals.currentLevel = level;
+  setupWordLoops(level);
+  setupHangman(level);
 
   drawHints();
   $("#canvas").animate([
@@ -85,12 +145,44 @@ export function setupGame(levelNum) {
   }
 }
 
+const HINT_TIME = 30000;
+let hintTimeout = null;
+$("#hint-btn").addEventListener("click", () => {
+  if (!globals.currentLevel) return;
+  let attempts = 0;
+  let r = randInt(0, globals.currentLength - 1);
+  while (attempts < 20) {
+    if (!globals.currentLevel.hintsA?.includes(r)) break;
+    if (!globals.currentLevel.hintsB?.includes(r)) break;
+    r = mod(r + 1);
+    attempts++;
+  }
+
+  if (!globals.currentLevel.hintsA) globals.currentLevel.hintsA = [];
+  if (!globals.currentLevel.hintsB) globals.currentLevel.hintsB = [];
+  globals.currentLevel.hintsA.push(r);
+  globals.currentLevel.hintsB.push(r);
+  drawHints();
+  $("#hint-btn").disabled = true;
+  clearTimeout(hintTimeout);
+  $("#hint-btn").animate([
+    { backgroundPosition: "0%" },
+    { backgroundPosition: "100%" }
+  ], { duration: HINT_TIME })
+  setTimeout(() => {
+    $("#hint-btn").disabled = false;
+  }, HINT_TIME)
+
+})
+
 export function drawHints() {
   if (globals.currentLevelNum == 0) return;
-  const { hintsA = [], hintsB = [], crossPos = [] } = levels[globals.currentLevelNum]
+  const { hintsA = [], hintsB = [], crossPos = [] } = globals.currentLevel;
   if (!hintsA && !hintsB) return;
 
   let [aLoop, bLoop] = $$(".wordLoop");
+  if (!aLoop) return;
+
   if (!globals.outsideStart) {
     let temp = aLoop;
     aLoop = bLoop;
@@ -100,6 +192,7 @@ export function drawHints() {
   const starts = []
   const ends = []
   for (const hint of hintsA) {
+    if (!aLoop) break;
     if (mod(hint) == 0) continue; // would connect to starting letter
     const end = aLoop.querySelector(`.letter[data-i='${mod(hint)}']`);
     let start;
@@ -109,6 +202,7 @@ export function drawHints() {
     ends.push(end);
   }
   for (const hint of hintsB) {
+    if (!bLoop) break;
     if (mod(hint) == 0) continue; // would connect to starting letter
     const end = bLoop.querySelector(`.letter[data-i='${mod(hint)}']`);
     let start;
@@ -118,7 +212,7 @@ export function drawHints() {
     ends.push(end);
   }
 
-  if (hintsA.includes(0) || hintsB.includes(0)) {
+  if (bLoop && (hintsA.includes(0) || hintsB.includes(0))) {
     // consider zero to always mean start of second word (start of b loop)
     const end = bLoop.querySelector(`.letter[data-i='${mod(0)}']`);
     let start;

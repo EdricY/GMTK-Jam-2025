@@ -2,13 +2,12 @@
 Loop!
 
 TODO:
+timed hint button
 quick play / time trial mode / infinite
-daily mode
+
+
 lock / unlock levels?
-title art
-settings
-create and send custom
+settings?
+create and send custom?
+avoid hints on same letter col
 
-animation timing - do you read the words? do you get to see the cool loop-de-loop
-
-hangman bubble sizing
