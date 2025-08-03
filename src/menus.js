@@ -9,6 +9,7 @@ const stages = [
   $("#levels"),
   $("#game-stage"),
   $("#credits"),
+  $("#settings"),
 ]
 
 export function hideAllStages() {
@@ -28,6 +29,7 @@ export function setupMenus() {
   setupMenuBtns();
   setupMenuTitle();
   setupLevelBtns();
+  setupSettings();
 }
 
 function setupLevelBtns() {
@@ -65,8 +67,6 @@ function setupLevelBtns() {
     showStage($("#game-stage"));
     setupQuickMode();
   });
-
-
 }
 
 
@@ -77,6 +77,9 @@ function setupMenuBtns() {
 
   $("#credits-btn").addEventListener("click", e => {
     showStage($("#credits"));
+  });
+  $("#settings-btn").addEventListener("click", e => {
+    showStage($("#settings"));
   });
 
   $$(".back-to-menu-btn").forEach(x => x.addEventListener("click", e => {
@@ -90,6 +93,13 @@ function setupMenuBtns() {
     showStage($("#levels"));
     // TODO: maybe need to check current level
   });
+}
+
+function setupSettings() {
+  $("#hint-setting").addEventListener("change", (e) => {
+    if (e.target.checked) $("#hint-btn").style.display = "block";
+    else $("#hint-btn").style.display = "none";
+  })
 }
 
 function setupMenuTitle() {

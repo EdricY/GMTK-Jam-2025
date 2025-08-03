@@ -9,7 +9,7 @@ const letterArray = globals.letterArray;
 function crossoverWords(crossPos, word1, word2) {
   if (crossPos >= word1.length || crossPos <= 0) {
     console.log("cross outside range:", crossPos)
-    return;
+    return [word1, word2];
   }
   let newWord1 = word1.slice(0, crossPos) + word2.slice(crossPos);
   let newWord2 = word2.slice(0, crossPos) + word1.slice(crossPos);

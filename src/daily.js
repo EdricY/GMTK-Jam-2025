@@ -9,10 +9,14 @@ export function getDailyLevel() {
 }
 
 export const dailyLevels = [
-  { words: ["warmth", "prince"], crossPos: [2, 4, 5, 7], hintsA: [0], hintsB: [0] },
   { words: ['mountain', 'vacation'], crossPos: [1, 3, 4, 7] },
   { words: ['careless', 'whispers'], crossPos: [4, 5, 6] },
+  { words: ['forever', 'alone'], crossPos: [4, 5, 6] },
+  { words: ['silent', 'majority'], crossPos: [2, 4] },
+  { words: ['unexamined', 'life'], crossPos: [1, 2, 3] },
   { words: ['railway', 'ancient'], crossPos: [1, 2, 3, 5] },
   { words: ['quickly', 'bubbles'], crossPos: [1, 4] },
   { words: ['freshly', 'himself'], crossPos: [2, 3, 4] },
+  { words: ['pattern', 'factory'], crossPos: [2, 4] },
+  { words: ['criminal', 'thirteen'], crossPos: [2, 4] },
 ]

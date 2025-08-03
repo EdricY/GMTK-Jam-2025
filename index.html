@@ -25,6 +25,7 @@
     <div class="menu-options">
       <button id="play-btn" class="menu-btn text-green-dark">Play!</button>
       <button id="daily-btn" class="menu-btn daily-game-btn">Today's Loop</button>
+      <button id="settings-btn" class="menu-btn">Settings</button>
       <button id="credits-btn" class="menu-btn">Credits</button>
     </div>
   </div>
@@ -66,6 +67,18 @@
       The Oxford 3000
     </div>
     <button class="back-to-menu-btn col-span-full menu-btn">Back</button>
+  </div>
+  <div id="settings" class="stage hidden!">
+    <div class="text-3xl">
+      Settings
+    </div>
+    <label class="flex items-center gap-2">
+      Show Hint Button
+      <input type="checkbox" id="hint-setting">
+    </label>
+    <div>A hints will be available every 30 seconds.</div>
+
+    <button class="back-to-menu-btn col-span-full menu-btn mt-10">Back</button>
   </div>
 
   <script type="module" src="/src/main.js"></script>
