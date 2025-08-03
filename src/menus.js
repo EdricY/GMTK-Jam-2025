@@ -100,6 +100,13 @@ function setupSettings() {
     if (e.target.checked) $("#hint-btn").style.display = "block";
     else $("#hint-btn").style.display = "none";
   })
+
+  $("#audio-setting").addEventListener("change", (e) => {
+    globals.audio = e.target.checked ? "1" : "0";
+    localStorage.setItem("audio-setting", globals.audio);
+  })
+  globals.audio = localStorage.getItem("audio-setting") ?? "1"
+  $("#audio-setting").checked = globals.audio == "1";
 }
 
 function setupMenuTitle() {

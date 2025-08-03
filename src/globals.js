@@ -9,5 +9,6 @@ globals.currentLevelNum = 0;
 globals.currentLevel = null;
 globals.winTransitioning = false;
 globals.singleLevels = []
+globals.audio = "1";
 
 export default globals;

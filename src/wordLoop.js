@@ -154,7 +154,8 @@ function hitLetter(e) {
 
     if (globals.letterArray.length == globals.currentLevel.words.join("").length) {
       if (isCorrect()) {
-        dingSound.play();
+        if (globals.audio == "1") dingSound.play();
+
         globals.winTransitioning = true;
 
         ctx.closePath();
