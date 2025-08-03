@@ -3,6 +3,8 @@ import { fillHangmanSegment, removeHangmanSegment } from "./hangman";
 import { levels } from "./levels";
 import { advanceLevel, clearArray, clearDownTo } from "./main";
 import { $, $$, mod, swap } from "./util";
+import dingPath from "./ding.mp3"
+const dingSound = new Audio(dingPath)
 
 const ctx = globals.ctx;
 const letterArray = globals.letterArray;
@@ -152,7 +154,9 @@ function hitLetter(e) {
 
     if (globals.letterArray.length == globals.currentLevel.words.join("").length) {
       if (isCorrect()) {
+        dingSound.play();
         globals.winTransitioning = true;
+
         ctx.closePath();
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.strokeStyle = "#1c122c";
