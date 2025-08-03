@@ -123,7 +123,7 @@ export const levels = [
 
   "15. Reel Life",
   { words: ['the', 'godfather'], crossPos: [], hintsA: [3], hintsB: [3] },
-  { words: ['jurassic', 'park'], crossPos: [1, 3], hintsA: [4], hintsB: [2] },
+  { words: ['jurassic', 'park'], crossPos: [1, 3], hintsA: [5], hintsB: [2] },
   { words: ['top', 'gun', 'maverick'], crossPos: [2, 3, 4], hintsA: [], hintsB: [3] },
   { words: ['dead', 'poets', 'society'], crossPos: [4, 5], hintsA: [3], hintsB: [] },
   { words: ['the', 'incredibles'], crossPos: [2, 4, 6] },
