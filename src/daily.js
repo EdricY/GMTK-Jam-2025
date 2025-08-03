@@ -1,9 +1,10 @@
-const START_DAY = 20303;
+const START_DAY = 20303
+const offset = 0;
 
 export function getDailyLevel() {
   const now = new Date();
   const ms = now.getTime() - now.getTimezoneOffset() * 60 * 1000;
-  const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+  const days = Math.floor(ms / (1000 * 60 * 60 * 24)) + offset;
   const idx = days - START_DAY;
   return dailyLevels[idx % dailyLevels.length];
 }
@@ -19,4 +20,5 @@ export const dailyLevels = [
   { words: ['freshly', 'himself'], crossPos: [2, 3, 4] },
   { words: ['pattern', 'factory'], crossPos: [2, 4] },
   { words: ['criminal', 'thirteen'], crossPos: [2, 4] },
+  { words: ['modern', 'design'], crossPos: [3, 4] },
 ]
