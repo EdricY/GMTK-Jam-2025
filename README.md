@@ -2,12 +2,9 @@
 Loop!
 
 TODO:
-timed hint button
-quick play / time trial mode / infinite
-
-
-lock / unlock levels?
-settings?
-create and send custom?
-avoid hints on same letter col
+- lock / unlock levels?
+- create and send custom?
+- avoid hints on same letter col (hint doesn't add info)
+- single/quick play add instruction
+- check for other words in dictionary during infinite play
 

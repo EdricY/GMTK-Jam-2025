@@ -108,8 +108,8 @@ export function setupSingleMode() {
   globals.currentLevelNum = SINGLE_START;
   globals.singleLevels = getRandomSingles();
   const level = globals.singleLevels[0];
-  $("#level-title").innerText = "1 / 10"
-  setupGameLevel(level)
+  $("#level-title").innerText = "1 / 10";
+  setupGameLevel(level);
 }
 
 const QUICK_START = -50;
