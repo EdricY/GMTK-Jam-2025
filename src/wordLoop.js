@@ -227,3 +227,15 @@ window.addEventListener("mousedown", () => {
   if (globals.currentLevelNum == 0) return;
   if (!globals.winTransitioning) clearArray();
 });
+window.addEventListener("wheel", (e) => {
+  let d = 5
+  if (e.deltaY < 0 || e.deltaX < 0) {
+    d = -5;
+  }
+
+  clearArray();
+  $$(".wordLoop").forEach(x => x.style.rotate =
+    (Number(x.style.rotate.split("deg")[0]) + d) + "deg"
+  )
+});
+
