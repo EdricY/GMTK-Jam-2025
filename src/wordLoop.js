@@ -103,6 +103,7 @@ export function createLoopLetter(ch, idx) {
 
 function hitLetter(e) {
   if (globals.winTransitioning) return;
+  if (e.touches?.length >= 2) return;
   let letter;
   // find what we're hitting (easy for mouse, hard for touch)
   if (e.pointerType == "mouse") {
@@ -237,5 +238,41 @@ window.addEventListener("wheel", (e) => {
   $$(".wordLoop").forEach(x => x.style.rotate =
     (Number(x.style.rotate.split("deg")[0]) + d) + "deg"
   )
+});
+
+let startAngle = 0;
+let startTouches = [];
+let startTheta = 0;
+window.addEventListener("touchstart", (e) => {
+  if (e.targetTouches.length != 2) return;
+  clearArray();
+  startTouches = [];
+  startTouches.push(...e.touches);
+  startAngle = Number($(".wordLoop").style.rotate.split("deg")[0]);
+  const dy = startTouches[1].screenY - startTouches[0].screenY;
+  const dx = startTouches[1].screenX - startTouches[0].screenX;
+  startTheta = Math.atan2(dy, dx);
+});
+
+window.addEventListener("touchmove", (e) => {
+  // find matching two touches
+  const point1 = [...e.touches].find(
+    (tp) => tp.identifier === startTouches[0].identifier,
+  );
+  const point2 = [...e.touches].find(
+    (tp) => tp.identifier === startTouches[1].identifier,
+  );
+
+  if (!point1 || !point2) return;
+  const dy = point2.screenY - point1.screenY;
+  const dx = point2.screenX - point1.screenX;
+  const theta = Math.atan2(dy, dx);
+  const dTheta = theta - startTheta;
+  const ang = dTheta * 180 / Math.PI
+
+  $$(".wordLoop").forEach(x => x.style.rotate =
+    (startAngle + ang) + "deg"
+  )
+  clearArray();
 });
 

@@ -386,6 +386,7 @@ body {
   @apply space-y-2 sm:space-y-3 md:space-y-6;
   /* @apply top-12 md:top-14; */
   @apply bottom-[64%] md:bottom-[65%];
+  @apply pointer-events-none;
   animation: fade-in 1s 0.4s both;
 }
 

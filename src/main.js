@@ -173,11 +173,12 @@ $("#hint-btn").addEventListener("click", () => {
   setTimeout(() => {
     $("#hint-btn").disabled = false;
   }, HINT_TIME)
-
 })
 
 export function drawHints() {
   if (globals.currentLevelNum == 0) return;
+  // ctx.fillText(window.debugtext1, 100, 100)
+  // ctx.fillText(window.debugtext2, 100, 200)
   const { hintsA = [], hintsB = [], crossPos = [] } = globals.currentLevel;
   if (!hintsA && !hintsB) return;
 
