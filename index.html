@@ -73,15 +73,20 @@
     <div class="text-3xl">
       Settings
     </div>
-    <label class="flex items-center gap-2">
-      Audio
+    <div class="grid items-center grid-cols-2 justify-items-start gap-x-4">
+      <label class="flex items-center gap-2" for="small-hitbox-setting">
+        Smaller Hitboxes
+      </label>
+      <input type="checkbox" id="small-hitbox-setting">
+      <label class="flex items-center gap-2" for="audio-setting">
+        Audio On
+      </label>
       <input type="checkbox" checked id="audio-setting">
-    </label>
-
-    <label class="flex items-center gap-2">
-      Show Hint Button
+      <label class="flex items-center gap-2" for="hint-setting">
+        Show Hint Button
+      </label>
       <input type="checkbox" id="hint-setting">
-    </label>
+    </div>
     <div>Hints will be available every 30 seconds.</div>
 
     <button class="back-to-menu-btn col-span-full menu-btn mt-10">Back</button>

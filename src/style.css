@@ -353,24 +353,32 @@ body {
 }
 
 .letter {
-  @apply rounded-full p-2 md:p-4;
+  @apply rounded-full;
+  @apply size-17 sm:size-18 md:size-24;
+  @apply grid place-items-center relative;
   pointer-events: auto;
 }
 
-.letter.letter-used .letter-circle {
-  /* background-color: hsl(93, 71%, 83%); */
-  color: hsl(0, 0%, 40%);
-  transform: scale(1.02);
-  transition: transform .1s cubic-bezier(.5, .5, 1, 10);
+.small-hitbox .letter {
+  @apply size-9 sm:size-10 md:size-12;
+  @apply m-4 sm:m-4 md:m-4;
 }
 
 .letter-circle {
+  @apply absolute;
   @apply size-13 sm:size-14 md:size-16;
   @apply text-2xl md:text-3xl;
   @apply bg-accent select-none font-semibold;
   @apply rounded-full;
   @apply grid place-items-center;
   @apply transition duration-100;
+  @apply pointer-events-none;
+}
+
+.letter.letter-used .letter-circle {
+  color: hsl(0, 0%, 40%);
+  transform: scale(1.02);
+  transition: transform .1s cubic-bezier(.5, .5, 1, 10);
 }
 
 #hangman {

@@ -25,6 +25,7 @@ const handleResize = (e) => {
 
   ctx.font = "bold 48px serif";
   ctx.lineJoin = "round";
+  clearArray();
   // ctx.fillText(window.devicePixelRatio || 1, 100 , 100)
   // ctx.fillText(window.innerWidth || 1, 100 , 200)
 }

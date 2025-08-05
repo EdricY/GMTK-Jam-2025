@@ -101,6 +101,16 @@ function setupSettings() {
     else $("#hint-btn").style.display = "none";
   })
 
+  $("#small-hitbox-setting").addEventListener("change", (e) => {
+    if (e.target.checked) $("#game-stage").classList.add("small-hitbox");
+    else $("#game-stage").classList.remove("small-hitbox");
+    localStorage.setItem("small-hitbox-setting", e.target.checked ? "1" : "0");
+  });
+  if (localStorage.getItem("small-hitbox-setting") == "1") {
+    $("#game-stage").classList.add("small-hitbox");
+    $("#small-hitbox-setting").checked = true;
+  }
+
   $("#audio-setting").addEventListener("change", (e) => {
     globals.audio = e.target.checked ? "1" : "0";
     localStorage.setItem("audio-setting", globals.audio);
