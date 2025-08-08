@@ -250,7 +250,7 @@ body {
 /* Game */
 
 #canvas {
-  @apply absolute w-full left-0 top-0;
+  @apply fixed w-full left-0 top-0;
   @apply pointer-events-none;
   height: var(--fullHeight, 100vh);
   min-width: var(--minWidth);

@@ -234,7 +234,7 @@ window.addEventListener("wheel", (e) => {
     d = -5;
   }
 
-  clearArray();
+  if (!globals.winTransitioning) clearArray();
   $$(".wordLoop").forEach(x => x.style.rotate =
     (Number(x.style.rotate.split("deg")[0]) + d) + "deg"
   )
