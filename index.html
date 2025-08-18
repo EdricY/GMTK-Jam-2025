@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/w.png" />
-  <meta name="viewport" content="width=480, initial-scale=0.75" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Word Looper</title>
   <link href="/src/style.css" rel="stylesheet">
 
@@ -12,89 +12,92 @@
 
 <body class="font-sans">
   <canvas id="canvas">You can't see me</canvas>
-  <div id="game-stage" class="stage hidden!">
-    <button id="ingame-back-btn">Back</button>
-    <button id="hint-btn">Hint</button>
-    <div id="level-title"></div>
-    <div id="hangman"></div>
-    <div id="instruction"></div>
-  </div>
-  <div id="menu" class="stage">
-    <div id="menu-header">
+  <div id="app-wrap">
+    <div id="game-stage" class="stage hidden!">
+      <button id="ingame-back-btn">Back</button>
+      <button id="hint-btn">Hint</button>
+      <div id="level-title"></div>
+      <div id="hangman"></div>
+      <div id="instruction"></div>
     </div>
-    <div class="menu-options">
-      <button id="play-btn" class="menu-btn text-green-dark">Play!</button>
-      <button id="daily-btn" class="menu-btn daily-game-btn">Today's Loop</button>
-      <button id="settings-btn" class="menu-btn">Settings</button>
-      <button id="credits-btn" class="menu-btn">Credits</button>
+    <div id="menu" class="stage">
+      <div id="menu-header">
+      </div>
+      <div class="menu-options">
+        <button id="play-btn" class="menu-btn text-green-dark">Play!</button>
+        <button id="daily-btn" class="menu-btn daily-game-btn">Today's Loop</button>
+        <button id="settings-btn" class="menu-btn">Settings</button>
+        <button id="credits-btn" class="menu-btn">Credits</button>
+      </div>
     </div>
-  </div>
-  <div id="levels" class="stage hidden!">
-    <button class="back-to-menu-btn mr-auto small-back-btn">Back</button>
-    <div class="col-2 col-span-2 text-center leading-none text-xl md:text-3xl bg-accent/50 px-6 py-2 rounded-full w-max mx-auto self-center">
-      Level Select
-    </div>
-    <div class=""></div>
-    <button class="level-btn">1</button>
-    <button class="level-btn">2</button>
-    <button class="level-btn">3</button>
-    <button class="level-btn">4</button>
-    <button class="level-btn">5</button>
-    <button class="level-btn">6</button>
-    <button class="level-btn">7</button>
-    <button class="level-btn">8</button>
-    <button class="level-btn">9</button>
-    <button class="level-btn">10</button>
-    <button class="level-btn">11</button>
-    <button class="level-btn">12</button>
-    <button class="level-btn">13</button>
-    <button class="level-btn">14</button>
-    <button class="level-btn">15</button>
-    <button class="level-btn">16</button>
-    <div class="col-span-full mr-auto w-full flex mt-8">
-      <button class="mr-auto menu-btn daily-game-btn">Today's Loop</button>
-      <button id="single-mode-btn" class="ml-auto menu-btn mx-2">Single Mode</button>
-      <button id="quick-play-btn" class="menu-btn">Quick Play</button>
-    </div>
+    <div id="levels" class="stage hidden!">
+      <button class="back-to-menu-btn mr-auto small-back-btn">Back</button>
+      <div
+        class="col-2 col-span-2 text-center leading-none text-xl md:text-3xl bg-accent/50 px-6 py-2 rounded-full w-max mx-auto self-center">
+        Level Select
+      </div>
+      <div class=""></div>
+      <button class="level-btn">1</button>
+      <button class="level-btn">2</button>
+      <button class="level-btn">3</button>
+      <button class="level-btn">4</button>
+      <button class="level-btn">5</button>
+      <button class="level-btn">6</button>
+      <button class="level-btn">7</button>
+      <button class="level-btn">8</button>
+      <button class="level-btn">9</button>
+      <button class="level-btn">10</button>
+      <button class="level-btn">11</button>
+      <button class="level-btn">12</button>
+      <button class="level-btn">13</button>
+      <button class="level-btn">14</button>
+      <button class="level-btn">15</button>
+      <button class="level-btn">16</button>
+      <div class="col-span-full mr-auto w-full flex mt-8">
+        <button class="mr-auto menu-btn daily-game-btn">Today's Loop</button>
+        <button id="single-mode-btn" class="ml-auto menu-btn mx-2">Single Mode</button>
+        <button id="quick-play-btn" class="menu-btn">Quick Play</button>
+      </div>
 
+    </div>
+    <div id="credits" class="stage hidden!">
+      <div class="text-3xl">
+        Word Looper Credits
+      </div>
+      <div class="text-xl text-center">
+        A game by<br />
+        Edric Yu and Imani Muya
+      </div>
+      <div>
+        Special thanks<br />
+        The Oxford 3000<br />
+        WordARound (card game)
+      </div>
+      <button class="back-to-menu-btn col-span-full menu-btn">Back</button>
+    </div>
+    <div id="settings" class="stage hidden!">
+      <div class="text-3xl">
+        Settings
+      </div>
+      <div class="grid items-center grid-cols-2 justify-items-start gap-x-4">
+        <label class="flex items-center gap-2" for="small-hitbox-setting">
+          Smaller Hitboxes
+        </label>
+        <input type="checkbox" id="small-hitbox-setting">
+        <label class="flex items-center gap-2" for="audio-setting">
+          Audio On
+        </label>
+        <input type="checkbox" checked id="audio-setting">
+        <label class="flex items-center gap-2" for="hint-setting">
+          Show Hint Button
+        </label>
+        <input type="checkbox" id="hint-setting">
+      </div>
+      <div>Hints will be available every 30 seconds.</div>
+      <button class="back-to-menu-btn col-span-full menu-btn mt-10">Back</button>
+    </div>
   </div>
-  <div id="credits" class="stage hidden!">
-    <div class="text-3xl">
-      Word Looper Credits
-    </div>
-    <div class="text-xl text-center">
-      A game by<br />
-      Edric Yu and Imani Muya
-    </div>
-    <div>
-      Special thanks<br />
-      The Oxford 3000<br />
-      WordARound (card game)
-    </div>
-    <button class="back-to-menu-btn col-span-full menu-btn">Back</button>
-  </div>
-  <div id="settings" class="stage hidden!">
-    <div class="text-3xl">
-      Settings
-    </div>
-    <div class="grid items-center grid-cols-2 justify-items-start gap-x-4">
-      <label class="flex items-center gap-2" for="small-hitbox-setting">
-        Smaller Hitboxes
-      </label>
-      <input type="checkbox" id="small-hitbox-setting">
-      <label class="flex items-center gap-2" for="audio-setting">
-        Audio On
-      </label>
-      <input type="checkbox" checked id="audio-setting">
-      <label class="flex items-center gap-2" for="hint-setting">
-        Show Hint Button
-      </label>
-      <input type="checkbox" id="hint-setting">
-    </div>
-    <div>Hints will be available every 30 seconds.</div>
 
-    <button class="back-to-menu-btn col-span-full menu-btn mt-10">Back</button>
-  </div>
 
   <script type="module" src="/src/main.js"></script>
 </body>
