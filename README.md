@@ -7,7 +7,12 @@ Loop!
 
 TODO:
 - lock / unlock levels?
-- header for levels page?
+- Vibrate,
+- On screen Rotate buttons
+- Keep awake
+- replace European spellings in dictionary
+- Safari is dumb
+- Jump to lower/higher letter instead of disable
 - create and send custom?
 - avoid hints on same letter col (hint doesn't add info)
 - single/quick play add instruction
