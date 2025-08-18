@@ -25,13 +25,6 @@ const handleResize = (e) => {
 
   ctx.font = "bold 48px serif";
   ctx.lineJoin = "round";
-
-  if (window.innerWidth < 480) {
-    $("#app-wrap").style = `scale: ${window.innerWidth / 480};`;
-  } else {
-    $("#app-wrap").style = "";
-  }
-
   clearArray();
   // ctx.fillText(window.devicePixelRatio || 1, 100 , 100)
   // ctx.fillText(window.innerWidth || 1, 100 , 200)
@@ -276,3 +269,12 @@ export function clearDownTo(idx) {
     ctx.stroke();
   }
 }
+
+/*
+function tick() {
+  requestAnimationFrame(tick);
+}
+
+requestAnimationFrame(tick)
+
+*/

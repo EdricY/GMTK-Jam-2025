@@ -69,21 +69,14 @@
 
 html {
   height: var(--fullHeight, 100vh);
-  min-width: 0;
+  min-width: var(--minWidth);
 }
 
 body {
-  min-width: 0;
+  min-width: var(--minWidth);
   height: var(--fullHeight, 100vh);
   overflow-x: hidden;
   @apply w-full flex items-center;
-}
-#app-wrap {
-  min-width: var(--minWidth);
-  transform-origin: left top;
-  height: var(--fullHeight, 100vh);
-  @apply w-full flex items-center mx-auto;
-  overflow-x: hidden; 
 }
 
 .stage {
@@ -260,10 +253,11 @@ body {
   @apply fixed w-full left-0 top-0;
   @apply pointer-events-none;
   height: var(--fullHeight, 100vh);
-  /* min-width: var(--minWidth); */
+  min-width: var(--minWidth);
   touch-action: none;
   /* filter: hue-rotate(0deg) brightness(1) invert(0); */
   filter: saturate(100%) hue-rotate(0deg);
+
 }
 
 #canvas.correct {
