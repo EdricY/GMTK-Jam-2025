@@ -97,9 +97,14 @@ function setupMenuBtns() {
 
 function setupSettings() {
   $("#hint-setting").addEventListener("change", (e) => {
-    if (e.target.checked) $("#hint-btn").style.display = "block";
-    else $("#hint-btn").style.display = "none";
+    if (e.target.checked) $("#hint-btn").classList.remove("hidden!")
+    else $("#hint-btn").classList.add("hidden!");
+    localStorage.setItem("hint-setting", e.target.checked ? "1" : "0");
   })
+  if (localStorage.getItem("hint-setting") == "1") {
+    $("#hint-btn").classList.remove("hidden!")
+    $("#hint-setting").checked = true;
+  }
 
   $("#small-hitbox-setting").addEventListener("change", (e) => {
     if (e.target.checked) $("#game-stage").classList.add("small-hitbox");
@@ -117,6 +122,25 @@ function setupSettings() {
   })
   globals.audio = localStorage.getItem("audio-setting") ?? "1"
   $("#audio-setting").checked = globals.audio == "1";
+
+  $("#rotate-btns-setting").addEventListener("change", (e) => {
+    if (e.target.checked) {
+      $("#rotate-left-btn").classList.remove("hidden!");
+      $("#rotate-right-btn").classList.remove("hidden!");
+    }
+    else {
+      $("#rotate-left-btn").classList.add("hidden!");
+      $("#rotate-right-btn").classList.add("hidden!");
+    }
+    localStorage.setItem("rotate-btns-setting", e.target.checked ? "1" : "0");
+  })
+
+  if (localStorage.getItem("rotate-btns-setting") == "1") {
+    $("#rotate-btns-setting").checked = true;
+    $("#rotate-left-btn").classList.remove("hidden!");
+    $("#rotate-right-btn").classList.remove("hidden!");
+  }
+
 }
 
 function setupMenuTitle() {

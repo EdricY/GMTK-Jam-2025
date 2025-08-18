@@ -14,7 +14,7 @@
 
 :root {
   --test: #396392;
-  --minWidth: 480px;
+  --minWidth: 320px;
 
   --fullHeight: 100vh;
   font-family: "Libertinus Sans", sans-serif;
@@ -35,6 +35,18 @@
 
   touch-action: none;
   user-select: none;
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 80%;
+  }
+}
+
+@media (max-width: 370px) {
+  html {
+    font-size: 60%;
+  }
 }
 
 @keyframes bg-move-40 {
@@ -81,7 +93,7 @@ body {
 
 .stage {
   width: 100%;
-  max-width: 720px;
+  max-width: 45rem;
   aspect-ratio: 3 / 4;
   margin-inline: auto;
   margin-block: auto;
@@ -380,6 +392,22 @@ body {
   transform: scale(1.02);
   transition: transform .1s cubic-bezier(.5, .5, 1, 10);
 }
+
+#rotate-right-btn,
+#rotate-left-btn {
+  @apply absolute p-[2%];
+  @apply bottom-[56%];
+  @apply cursor-pointer;
+}
+
+#rotate-right-btn {
+  @apply right-[15%];
+}
+
+#rotate-left-btn {
+  @apply left-[15%];
+}
+
 
 #hangman {
   @apply absolute p-[2%] w-full;

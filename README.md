@@ -9,9 +9,10 @@ TODO:
 - lock / unlock levels?
 - Vibrate,
 - On screen Rotate buttons
+- capture back navigation
 - Keep awake
 - replace European spellings in dictionary
-- Safari is dumb
+- Safari is dumb?
 - Jump to lower/higher letter instead of disable
 - create and send custom?
 - avoid hints on same letter col (hint doesn't add info)
