@@ -398,6 +398,12 @@ body {
   @apply absolute p-[2%];
   @apply bottom-[56%];
   @apply cursor-pointer;
+  animation: fade-in 1s 0.4s both;
+}
+
+#rotate-right-btn.correct,
+#rotate-left-btn.correct {
+  animation: fade-out 300ms 1200ms both;
 }
 
 #rotate-right-btn {

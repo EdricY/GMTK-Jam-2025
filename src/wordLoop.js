@@ -172,6 +172,8 @@ function hitLetter(e) {
         $("#hangman").classList.add("correct")
         $("#canvas").classList.add("correct")
         $("#instruction").classList.add("correct")
+        $("#rotate-right-btn").classList.add("correct")
+        $("#rotate-left-btn").classList.add("correct")
         $("#canvas").animate([
           {
             opacity: 1, filter: "saturate(100%) hue-rotate(0deg)"
@@ -259,6 +261,10 @@ $("#rotate-right-btn").addEventListener("pointerdown", () => {
 $("#rotate-right-btn").addEventListener("pointerup", () => {
   clearInterval(rotateInterval);
 });
+$("#rotate-right-btn").addEventListener("pointerleave", () => {
+  clearInterval(rotateInterval);
+});
+
 
 
 $("#rotate-left-btn").addEventListener("pointerdown", () => {
@@ -273,6 +279,10 @@ $("#rotate-left-btn").addEventListener("pointerdown", () => {
 $("#rotate-left-btn").addEventListener("pointerup", () => {
   clearInterval(rotateInterval);
 });
+$("#rotate-left-btn").addEventListener("pointerleave", () => {
+  clearInterval(rotateInterval);
+});
+
 
 
 

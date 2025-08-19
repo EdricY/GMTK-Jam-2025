@@ -75,6 +75,9 @@ export function cleanUpGame() {
   $("#hangman").classList.remove("correct");
   $("#canvas").classList.remove("correct");
   $("#instruction").classList.remove("correct");
+  $("#rotate-left-btn").classList.remove("correct");
+  $("#rotate-right-btn").classList.remove("correct");
+  
   $("#hangman").innerHTML = "";
   $$(".wordLoop").forEach(el => {
     el.parentElement.removeChild(el);
