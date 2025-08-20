@@ -294,7 +294,6 @@ body {
   @apply transition bg-accent/40 hover:bg-accent;
   @apply bg-linear-to-r to-accent/40 to-50%;
   @apply from-49% from-green-dark/40;
-  display: none;
 
   background-size: 200%;
   background-position: 100%;

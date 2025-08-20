@@ -134,13 +134,11 @@ function setupSettings() {
     }
     localStorage.setItem("rotate-btns-setting", e.target.checked ? "1" : "0");
   })
-
   if (localStorage.getItem("rotate-btns-setting") == "1") {
     $("#rotate-btns-setting").checked = true;
     $("#rotate-left-btn").classList.remove("hidden!");
     $("#rotate-right-btn").classList.remove("hidden!");
   }
-
 }
 
 function setupMenuTitle() {
