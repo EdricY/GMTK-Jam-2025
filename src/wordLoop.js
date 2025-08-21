@@ -187,7 +187,7 @@ function hitLetter(e) {
         );
 
         $$(".wordLoop").forEach(x => x.classList.add("correct"))
-        setTimeout(() => {
+        globals.advanceTimeout = setTimeout(() => {
           globals.winTransitioning = false;
           advanceLevel();
         }, 2000)

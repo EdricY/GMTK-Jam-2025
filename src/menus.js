@@ -47,6 +47,7 @@ function setupLevelBtns() {
 
   $("#levels").addEventListener("click", e => {
     if (e.target.classList.contains("level-btn")) {
+      window.history.pushState(null, "");
       showStage($("#game-stage"));
       const levelNum = e.target.getAttribute("data-level");
       setupGame(levelNum);
@@ -54,46 +55,61 @@ function setupLevelBtns() {
   });
 
   $$(".daily-game-btn").forEach(x => x.addEventListener("click", e => {
+    window.history.pushState(null, "");
     showStage($("#game-stage"));
     setupDailyGame();
   }));
-
+  $("#daily-btn").addEventListener("click", e => {
+    // extra history entry, since we jump: menu > levels > game
+    window.history.pushState(null, "");
+  })
 
   $("#single-mode-btn").addEventListener("click", e => {
+    window.history.pushState(null, "");
     showStage($("#game-stage"));
     setupSingleMode();
   });
+
   $("#quick-play-btn").addEventListener("click", e => {
+    window.history.pushState(null, "");
     showStage($("#game-stage"));
     setupQuickMode();
   });
 }
 
-
 function setupMenuBtns() {
   $("#play-btn").addEventListener("click", e => {
+    window.history.pushState(null, "");
     showStage($("#levels"));
   });
 
   $("#credits-btn").addEventListener("click", e => {
+    window.history.pushState(null, "");
     showStage($("#credits"));
   });
   $("#settings-btn").addEventListener("click", e => {
+    window.history.pushState(null, "");
     showStage($("#settings"));
   });
 
   $$(".back-to-menu-btn").forEach(x => x.addEventListener("click", e => {
-    cleanUpGame();
-    showStage($("#menu"));
+    window.history.back();
   }));
 
   $("#ingame-back-btn").addEventListener("click", e => {
     if (globals.winTransitioning) return;
-    cleanUpGame();
-    showStage($("#levels"));
-    // TODO: maybe need to check current level
+    window.history.back();
   });
 }
+
+window.addEventListener("popstate", () => {
+  cleanUpGame();
+  if ($("#game-stage").classList.contains("hidden!")) {
+    showStage($("#menu"));
+  } else {
+    showStage($("#levels"));
+  }
+});
 
 function setupSettings() {
   $("#hint-setting").addEventListener("change", (e) => {
