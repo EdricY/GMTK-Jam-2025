@@ -32,4 +32,10 @@ export const dailyLevels = [
   { words: ['beyond', 'infinity'], crossPos: [1, 3, 4] },
   { words: ['filthy', 'animal'], crossPos: [1, 4] },
   { words: ['emotional', 'support'], crossPos: [2, 5] },
+  { words: ['ignore', 'detail'], crossPos: [2, 3, 4] },
+  { words: ['marriage', 'proposal'], crossPos: [1, 4] },
+  { words: ['allied', 'forces'], crossPos: [2, 5] },
+  { words: ['secretly', 'romantic'], crossPos: [1, 3] },
+  { words: ['chemical', 'physical'], crossPos: [2, 5] },
+  { words: ['artistic', 'original'], crossPos: [1, 3, 4] },
 ]
