@@ -6,7 +6,6 @@ Loop!
 [Play on my site](https://word-looper.edric.dev/)
 
 TODO:
-- pwa, theme color
 - lock / unlock levels?
 - capture back navigation
 - Safari is dumb?
