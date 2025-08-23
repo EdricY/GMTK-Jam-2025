@@ -1,11 +1,10 @@
 import './style.css'
-import { createWordLoop, setupWordLoops } from './wordLoop.js'
-import { $, $$, mod, randEl, randInt, swap } from './util.js'
-import { createHangmanWord, removeHangmanSegment, setupHangman } from './hangman.js'
-import { setupMenus, showStage } from './menus.js'
+import { setupWordLoops } from './wordLoop.js'
+import { $, $$, mod, randInt } from './util.js'
+import { removeHangmanSegment, setupHangman } from './hangman.js'
+import { setupMenus } from './menus.js'
 import { getRandomQuickLevels, getRandomSingles, getTitle, levels, setComplete } from './levels.js'
 import globals from './globals.js'
-import { words6 } from './dictionary-6.js'
 import { getDailyLevel } from './daily.js'
 
 setupMenus();
@@ -66,8 +65,7 @@ export function advanceLevel() {
     setComplete(globals.currentLevelNum - 1);
     globals.currentLevelNum = 0;
     globals.currentLevel = null;
-    cleanUpGame();
-    showStage($("#levels"))
+    window.history.back();
   }
 }
 
@@ -75,6 +73,9 @@ export function cleanUpGame() {
   $("#hangman").classList.remove("correct");
   $("#canvas").classList.remove("correct");
   $("#instruction").classList.remove("correct");
+  $("#rotate-left-btn").classList.remove("correct");
+  $("#rotate-right-btn").classList.remove("correct");
+
   $("#hangman").innerHTML = "";
   $$(".wordLoop").forEach(el => {
     el.parentElement.removeChild(el);
@@ -82,6 +83,8 @@ export function cleanUpGame() {
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   ctx.beginPath();
   letterArray.splice(0);
+  globals.winTransitioning = false;
+  clearTimeout(globals.advanceTimeout);
 }
 
 export function setupGame(levelNum) {
@@ -270,11 +273,3 @@ export function clearDownTo(idx) {
   }
 }
 
-/*
-function tick() {
-  requestAnimationFrame(tick);
-}
-
-requestAnimationFrame(tick)
-
-*/

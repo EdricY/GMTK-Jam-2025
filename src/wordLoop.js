@@ -128,8 +128,13 @@ function hitLetter(e) {
   // check if it could be next letter
   const i = letter.getAttribute("data-i");
   const prevI = prevLetter?.getAttribute("data-i");
-  // avoid hitting the letter directly above/below
-  if (mod(prevI - i, len) == 0) return;
+  if (mod(prevI - i, len) == 0) {
+    // for letter directly above/below 
+    if (letter.classList.contains("letter-used")) return;
+    // remove previous to allow quick swap
+    clearDownTo(letterArray.length - 2);
+  }
+
   if (prevI == null || mod(prevI - i, len) == mod(-1, len)) {
     // not a new letter, do nothing (avoid accidental clearing)
     if (letter.classList.contains("letter-used")) return;
@@ -152,7 +157,8 @@ function hitLetter(e) {
 
     fillHangmanSegment(globals.letterArray.length, ch)
     globals.letterArray.push(letter);
-
+    vibrate();
+    requestWakeLock();
     if (globals.letterArray.length == globals.currentLevel.words.join("").length) {
       if (isCorrect()) {
         if (globals.audio == "1") dingSound.play();
@@ -166,6 +172,8 @@ function hitLetter(e) {
         $("#hangman").classList.add("correct")
         $("#canvas").classList.add("correct")
         $("#instruction").classList.add("correct")
+        $("#rotate-right-btn").classList.add("correct")
+        $("#rotate-left-btn").classList.add("correct")
         $("#canvas").animate([
           {
             opacity: 1, filter: "saturate(100%) hue-rotate(0deg)"
@@ -179,7 +187,7 @@ function hitLetter(e) {
         );
 
         $$(".wordLoop").forEach(x => x.classList.add("correct"))
-        setTimeout(() => {
+        globals.advanceTimeout = setTimeout(() => {
           globals.winTransitioning = false;
           advanceLevel();
         }, 2000)
@@ -240,6 +248,46 @@ window.addEventListener("wheel", (e) => {
   )
 });
 
+let rotateInterval = null;
+$("#rotate-right-btn").addEventListener("pointerdown", () => {
+  clearInterval(rotateInterval);
+  rotateInterval = setInterval(() => {
+    if (!globals.winTransitioning) clearArray();
+    $$(".wordLoop").forEach(x => x.style.rotate =
+      (Number(x.style.rotate.split("deg")[0]) + 1) + "deg"
+    )
+  })
+})
+$("#rotate-right-btn").addEventListener("pointerup", () => {
+  clearInterval(rotateInterval);
+});
+$("#rotate-right-btn").addEventListener("pointerleave", () => {
+  clearInterval(rotateInterval);
+});
+
+
+
+$("#rotate-left-btn").addEventListener("pointerdown", () => {
+  clearInterval(rotateInterval);
+  rotateInterval = setInterval(() => {
+    if (!globals.winTransitioning) clearArray();
+    $$(".wordLoop").forEach(x => x.style.rotate =
+      (Number(x.style.rotate.split("deg")[0]) - 1) + "deg"
+    )
+  })
+})
+$("#rotate-left-btn").addEventListener("pointerup", () => {
+  clearInterval(rotateInterval);
+});
+$("#rotate-left-btn").addEventListener("pointerleave", () => {
+  clearInterval(rotateInterval);
+});
+
+
+
+
+
+
 let startAngle = 0;
 let startTouches = [];
 let startTheta = 0;
@@ -275,4 +323,30 @@ window.addEventListener("touchmove", (e) => {
   )
   clearArray();
 });
+
+
+let navigator = window.navigator || {};
+const vibrateFunc = navigator.vibrate
+  || navigator.webkitVibrate
+  || navigator.mozVibrate
+  || navigator.msVibrate
+  || undefined;
+
+function vibrate() {
+  if (vibrateFunc) {
+    try {
+      vibrateFunc(30);
+    } catch { }
+  }
+}
+
+let wakeLock;
+let wakeLockWaiting = false;
+async function requestWakeLock() {
+  if (!wakeLock || wakeLock.released || wakeLockWaiting) {
+    wakeLockWaiting = true;
+    wakeLock = await navigator.wakeLock.request("screen");
+    wakeLockWaiting = false;
+  }
+}
 

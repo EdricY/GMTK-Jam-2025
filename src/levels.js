@@ -117,7 +117,7 @@ export const levels = [
   "14. Mind Over Metadata",
   { words: ['code', 'repository'], crossPos: [], hintsA: [2], hintsB: [2] },
   { words: ['virtual', 'reality'], crossPos: [3], hintsA: [4, 5], hintsB: [] },
-  { words: ['digital', 'marketing'], crossPos: [2, 5], hintsA: [4] },
+  { words: ['digital', 'marketing'], crossPos: [2, 5], hintsA: [6] },
   { words: ['user', 'experience'], crossPos: [3, 5], hintsB: [5] },
   { words: ['click', 'through', 'rate'], crossPos: [2, 4, 5] },
 

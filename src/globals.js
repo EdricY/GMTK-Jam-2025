@@ -8,6 +8,7 @@ globals.currentLength = 8;
 globals.currentLevelNum = 0;
 globals.currentLevel = null;
 globals.winTransitioning = false;
+globals.advanceTimeout = null;
 globals.singleLevels = []
 globals.audio = "1";
 

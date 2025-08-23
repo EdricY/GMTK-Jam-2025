@@ -47,6 +47,7 @@ function setupLevelBtns() {
 
   $("#levels").addEventListener("click", e => {
     if (e.target.classList.contains("level-btn")) {
+      window.history.pushState(null, "");
       showStage($("#game-stage"));
       const levelNum = e.target.getAttribute("data-level");
       setupGame(levelNum);
@@ -54,52 +55,72 @@ function setupLevelBtns() {
   });
 
   $$(".daily-game-btn").forEach(x => x.addEventListener("click", e => {
+    window.history.pushState(null, "");
     showStage($("#game-stage"));
     setupDailyGame();
   }));
-
+  $("#daily-btn").addEventListener("click", e => {
+    // extra history entry, since we jump: menu > levels > game
+    window.history.pushState(null, "");
+  })
 
   $("#single-mode-btn").addEventListener("click", e => {
+    window.history.pushState(null, "");
     showStage($("#game-stage"));
     setupSingleMode();
   });
+
   $("#quick-play-btn").addEventListener("click", e => {
+    window.history.pushState(null, "");
     showStage($("#game-stage"));
     setupQuickMode();
   });
 }
 
-
 function setupMenuBtns() {
   $("#play-btn").addEventListener("click", e => {
+    window.history.pushState(null, "");
     showStage($("#levels"));
   });
 
   $("#credits-btn").addEventListener("click", e => {
+    window.history.pushState(null, "");
     showStage($("#credits"));
   });
   $("#settings-btn").addEventListener("click", e => {
+    window.history.pushState(null, "");
     showStage($("#settings"));
   });
 
   $$(".back-to-menu-btn").forEach(x => x.addEventListener("click", e => {
-    cleanUpGame();
-    showStage($("#menu"));
+    window.history.back();
   }));
 
   $("#ingame-back-btn").addEventListener("click", e => {
     if (globals.winTransitioning) return;
-    cleanUpGame();
-    showStage($("#levels"));
-    // TODO: maybe need to check current level
+    window.history.back();
   });
 }
 
+window.addEventListener("popstate", () => {
+  cleanUpGame();
+  if ($("#game-stage").classList.contains("hidden!")) {
+    showStage($("#menu"));
+  } else {
+    showStage($("#levels"));
+  }
+});
+
 function setupSettings() {
   $("#hint-setting").addEventListener("change", (e) => {
-    if (e.target.checked) $("#hint-btn").style.display = "block";
-    else $("#hint-btn").style.display = "none";
+    if (e.target.checked) $("#hint-btn").classList.remove("hidden!")
+    else $("#hint-btn").classList.add("hidden!");
+    localStorage.setItem("hint-setting", e.target.checked ? "1" : "0");
   })
+  if (localStorage.getItem("hint-setting") == "1") {
+    $("#hint-btn").classList.remove("hidden!")
+    $("#hint-setting").checked = true;
+  }
 
   $("#small-hitbox-setting").addEventListener("change", (e) => {
     if (e.target.checked) $("#game-stage").classList.add("small-hitbox");
@@ -117,6 +138,23 @@ function setupSettings() {
   })
   globals.audio = localStorage.getItem("audio-setting") ?? "1"
   $("#audio-setting").checked = globals.audio == "1";
+
+  $("#rotate-btns-setting").addEventListener("change", (e) => {
+    if (e.target.checked) {
+      $("#rotate-left-btn").classList.remove("hidden!");
+      $("#rotate-right-btn").classList.remove("hidden!");
+    }
+    else {
+      $("#rotate-left-btn").classList.add("hidden!");
+      $("#rotate-right-btn").classList.add("hidden!");
+    }
+    localStorage.setItem("rotate-btns-setting", e.target.checked ? "1" : "0");
+  })
+  if (localStorage.getItem("rotate-btns-setting") == "1") {
+    $("#rotate-btns-setting").checked = true;
+    $("#rotate-left-btn").classList.remove("hidden!");
+    $("#rotate-right-btn").classList.remove("hidden!");
+  }
 }
 
 function setupMenuTitle() {

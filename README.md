@@ -7,7 +7,8 @@ Loop!
 
 TODO:
 - lock / unlock levels?
-- header for levels page?
+- capture back navigation
+- Safari is dumb?
 - create and send custom?
 - avoid hints on same letter col (hint doesn't add info)
 - single/quick play add instruction
