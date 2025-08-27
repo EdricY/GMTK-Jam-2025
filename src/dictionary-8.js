@@ -289,7 +289,6 @@ export const words8 = [
   "sentence",
   "separate",
   "severely",
-  "sexually",
   "shocking",
   "shooting",
   "shopping",

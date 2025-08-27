@@ -38,4 +38,12 @@ export const dailyLevels = [
   { words: ['secretly', 'romantic'], crossPos: [1, 3] },
   { words: ['chemical', 'physical'], crossPos: [2, 5] },
   { words: ['artistic', 'original'], crossPos: [1, 3, 4] },
+  { words: ['beverly', 'hills'], crossPos: [2, 4] },
+  { words: ['curiosity', 'rover'], crossPos: [1, 4, 5] },
+  { words: ['artificial', 'prompt'], crossPos: [1, 3, 5] },
+  { words: ['triangle', 'window'], crossPos: [1, 2, 5] },
+  { words: ['universal', 'right'], crossPos: [2, 3, 5] },
+  { words: ['embrace', 'challenge'], crossPos: [2, 3, 6] },
+  { words: ['pitch', 'meeting'], crossPos: [1, 4] },
 ]
+
