@@ -45,5 +45,16 @@ export const dailyLevels = [
   { words: ['universal', 'right'], crossPos: [2, 3, 5] },
   { words: ['embrace', 'challenge'], crossPos: [2, 3, 6] },
   { words: ['pitch', 'meeting'], crossPos: [1, 4] },
+  { words: ['silver', 'lining'], crossPos: [2, 3, 4] },
+  { words: ['timeless', 'beauty'], crossPos: [1, 4, 5] },
+  { words: ['empty', 'promise'], crossPos: [2, 3] },
+  { words: ['endless', 'horizon'], crossPos: [1, 4] },
+  { words: ['cosmic', 'energy'], crossPos: [1, 3, 4] },
+  { words: ['rolling', 'thunder'], crossPos: [2, 4, 5] },
+  { words: ['concrete', ' jungle'], crossPos: [1, 4] },
+  { words: ['twisted', 'logic'], crossPos: [1, 2, 4] },
+  { words: ['borrowed', ' time'], crossPos: [2, 3, 4] },
+  { words: ['burning', 'questions'], crossPos: [1, 2, 4, 5] },
+  { words: ['continuous', 'motion'], crossPos: [2, 3, 5] },
 ]
 
