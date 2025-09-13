@@ -53,7 +53,7 @@ export const dailyLevels = [
   { words: ['rolling', 'thunder'], crossPos: [2, 4, 5] },
   { words: ['concrete', 'jungle'], crossPos: [1, 4] },
   { words: ['twisted', 'logic'], crossPos: [1, 2, 4] },
-  { words: ['borrowed', ' time'], crossPos: [2, 3, 4] },
+  { words: ['borrowed', 'time'], crossPos: [2, 3, 4] },
   { words: ['burning', 'questions'], crossPos: [1, 2, 4, 5] },
   { words: ['continuous', 'motion'], crossPos: [2, 3, 5] },
 ]
