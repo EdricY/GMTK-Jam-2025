@@ -11,5 +11,6 @@ globals.winTransitioning = false;
 globals.advanceTimeout = null;
 globals.singleLevels = []
 globals.audio = "1";
+globals.fingerRotate = true;
 
 export default globals;

@@ -292,7 +292,17 @@ let startAngle = 0;
 let startTouches = [];
 let startTheta = 0;
 window.addEventListener("touchstart", (e) => {
-  if (e.targetTouches.length != 2) return;
+  if (!globals.fingerRotate) return;
+  if (e.touches.length != 2) return;
+  const isTargettingLetter = e.touches[0].target.classList.contains("letter")
+    || e.touches[0].target.classList.contains("letter-circle")
+    || e.touches[1].target.classList.contains("letter")
+    || e.touches[1].target.classList.contains("letter-circle")
+  if (isTargettingLetter) {
+    startTouches = [];
+    return;
+  }
+
   clearArray();
   startTouches = [];
   startTouches.push(...e.touches);
@@ -303,12 +313,15 @@ window.addEventListener("touchstart", (e) => {
 });
 
 window.addEventListener("touchmove", (e) => {
+  if (!globals.fingerRotate) return;
+  if (startTouches.length < 2) return;
+
   // find matching two touches
   const point1 = [...e.touches].find(
-    (tp) => tp.identifier === startTouches[0].identifier,
+    (tp) => tp.identifier === startTouches[0]?.identifier,
   );
   const point2 = [...e.touches].find(
-    (tp) => tp.identifier === startTouches[1].identifier,
+    (tp) => tp.identifier === startTouches[1]?.identifier,
   );
 
   if (!point1 || !point2) return;
@@ -324,18 +337,19 @@ window.addEventListener("touchmove", (e) => {
   clearArray();
 });
 
-
-let navigator = window.navigator || {};
-const vibrateFunc = navigator.vibrate
-  || navigator.webkitVibrate
-  || navigator.mozVibrate
-  || navigator.msVibrate
-  || undefined;
+let doVibrate = false;
+if ("vibrate" in navigator) {
+  doVibrate = true;
+  navigator.vibrate = navigator.vibrate
+    || navigator.webkitVibrate
+    || navigator.mozVibrate
+    || navigator.msVibrate;
+}
 
 function vibrate() {
-  if (vibrateFunc) {
+  if (doVibrate) {
     try {
-      vibrateFunc(30);
+      navigator.vibrate(30);
     } catch { }
   }
 }

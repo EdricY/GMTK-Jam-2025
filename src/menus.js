@@ -112,6 +112,15 @@ window.addEventListener("popstate", () => {
 });
 
 function setupSettings() {
+  $("#rotate-setting").addEventListener("change", (e) => {
+    localStorage.setItem("rotate-setting", e.target.checked ? "1" : "0");
+    globals.fingerRotate = e.target.checked;
+  })
+  if (localStorage.getItem("rotate-setting") == "0") {
+    $("#rotate-setting").checked = false;
+    globals.fingerRotate = false;
+  }
+
   $("#hint-setting").addEventListener("change", (e) => {
     if (e.target.checked) $("#hint-btn").classList.remove("hidden!")
     else $("#hint-btn").classList.add("hidden!");
