@@ -89,6 +89,7 @@ body {
   height: var(--fullHeight, 100vh);
   overflow-x: hidden;
   @apply w-full flex items-center;
+  touch-action: none;
 }
 
 .stage {
